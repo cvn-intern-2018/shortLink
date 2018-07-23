@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2018 at 10:52 AM
+-- Generation Time: Jul 23, 2018 at 11:38 AM
 -- Server version: 10.1.34-MariaDB
 -- PHP Version: 7.2.7
 
@@ -43,8 +43,8 @@ CREATE TABLE `info` (
 
 CREATE TABLE `url` (
   `id` int(10) UNSIGNED NOT NULL,
-  `url` varchar(256) NOT NULL,
-  `short_url` varchar(6) NOT NULL,
+  `url` text NOT NULL,
+  `short_url` varchar(20) NOT NULL,
   `num_click` int(11) DEFAULT '0',
   `time_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -65,7 +65,6 @@ ALTER TABLE `info`
 --
 ALTER TABLE `url`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `url` (`url`),
   ADD UNIQUE KEY `short_url` (`short_url`);
 
 --
