@@ -15,7 +15,7 @@ class Url extends Migration
     {
         Schema::create('url', function (Blueprint $table){
             $table->increments('id');
-            $table->text('original_url');
+            $table->text('original_url',2048);
             $table->string('shorten_url', 20);
             $table->timestamp('time_create');
             $table->unique('shorten_url');
