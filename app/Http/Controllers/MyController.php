@@ -10,7 +10,7 @@ class MyController extends Controller
     public function function1(){
         $url = new Url();
         $url->url_original = 'aaa';
-        $url->url_shorten = 'bbb';
+        $url->url_shorten = 'bbbx';
         $url->url_info = 'ccc';
         $url->save();
     }
