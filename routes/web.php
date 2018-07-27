@@ -11,6 +11,6 @@
 |
 */
 //
-Route::get('/', 'home@index');
-Route::get('/chart', 'chart@index');
+Route::get('/', 'HomeController@index');
+Route::get('/chart', 'ChartController@index');
 
