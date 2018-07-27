@@ -15,11 +15,12 @@ class Url extends Migration
     {
         Schema::create('url', function (Blueprint $table){
             $table->bigIncrements('id');
-            $table->text('original_url',2048);
-            $table->string('shorten_url', 20);
-            $table->timestamp('time_create');
-            $table->longText('info');
-            $table->unique('shorten_url');
+            $table->text('url_original',2048);
+            $table->string('url_shorten', 20);
+            $table->timestamp('created_at');
+            $table->longText('url_info');
+            $table->unique('url_shorten');
+
 
         });
     }
