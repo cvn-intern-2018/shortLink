@@ -14,3 +14,5 @@
 Route::get('/', 'home@index');
 Route::get('/chart', 'chart@index');
 
+
+Route::get('/demo','ControllerUrl@function1');
