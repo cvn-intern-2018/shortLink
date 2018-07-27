@@ -15,3 +15,5 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 Route::get('/', 'home@index');
+
+Route::get('/demo','MyController@function1');
