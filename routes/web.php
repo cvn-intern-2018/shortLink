@@ -11,7 +11,6 @@
 |
 */
 //
-Route::get('/welcome', function () {
-    return view('welcome');
-});
 Route::get('/', 'home@index');
+Route::get('/chart', 'chart@index');
+
