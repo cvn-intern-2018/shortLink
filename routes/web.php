@@ -12,6 +12,7 @@
 */
 //
 Route::get('/', 'home@index');
+Route::get('/encode/{id}','home@encode');
 Route::get('/chart', 'chart@index');
 
 
