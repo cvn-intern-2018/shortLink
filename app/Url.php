@@ -8,4 +8,10 @@ class Url extends Model
 {
     protected $table ='url';
     public $timestamps = false;
+
+    function Add(){
+
+    }
+
+
 }
