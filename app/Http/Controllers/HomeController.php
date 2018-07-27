@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function index()
     {
         $url = 'https://github.com/cotdp/php-rc4/blob/master/rc4.php';
-        $original_url = Url::where('url_original',$url)->get()->toJson();//or toArray
+        $original_url = Url::where('url_original',$url)->get()->toJson();//or toArray or
         var_dump($original_url);
     }
     public function getURLShortener()
