@@ -20,18 +20,19 @@
                         <div class="email text-center"><i class="fa fa-link" aria-hidden="true"></i></div>
                         <p class="tag-line text-center">Quality, more value of a link</p>
                         <h1 class="pull-stop text-center">Cybozu URL Shortener</h1>
-                        <form class="login-reg subscribe text-center form-inline" id="frm-short">
+                        <form class="login-reg subscribe text-center form-inline" id="frm-short" method="post" action="short">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row margin-bottom-0">
                                 <div class="col-md-12 col-sm-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control input-lg" id="exampleInputEmail2" placeholder="Your URL here">
+                                        <input type="text" class="form-control input-lg" id="org_url" placeholder="Your URL here" name="org_url">
                                     </div>
                                     <div class="customize form-group">
                                         <h4>Customize short URL (Optional)</h4>
-                                        <p>http://cus.dev.cybozu.xyz/</p><input type="text" class="" placeholder="Customize URL here">
+                                        <p>http://cus.dev.cybozu.xyz/</p><input type="text" id="custom_url" name="custom_url" placeholder="Customize URL here">
                                     </div>
                                     <div class="btn-shorten form-group">
-                                        <a href="#" id="btn-shorten"   type="submit" class="btn btn-info button">Shorten</a>
+                                        <button href="#" id="btn-shorten" type="submit" class="btn btn-info button" name="btn-shorten">Shorten</button>
                                     </div>
                                     <div class="form-group" id="result-short">
                                         <h4>Original URL</h4>
@@ -41,7 +42,7 @@
                                         <h4>URL Shortener</h4>
                                         <div class="row shortURL">
                                             <div class="col-md-8">
-                                                <a href="#">http://cus.dev.cybozu.xyz/abcdef</a>
+                                                <a href="#" id="short_generate">http://cus.dev.cybozu.xyz/abcdef</a>
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
@@ -53,7 +54,7 @@
                                         <br/>
                                         <div class="row shortURL">
                                             <div class="col-md-8">
-                                                <a href="#">http://cus.dev.cybozu.xyz/Customize</a>
+                                                <a href="#" id="short_customize">http://cus.dev.cybozu.xyz/Customize</a>
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>

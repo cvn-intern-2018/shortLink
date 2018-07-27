@@ -17,8 +17,8 @@ class Url extends Migration
             $table->bigIncrements('id');
             $table->text('url_original',2048);
             $table->string('url_shorten', 20);
-            $table->timestamp('created_at');
             $table->longText('url_info');
+            $table->timestamp('created_at');
             $table->unique('url_shorten');
 
 

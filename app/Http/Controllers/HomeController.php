@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 
 namespace App\Http\Controllers;
 
@@ -50,4 +51,27 @@ class HomeController extends Controller
 
         echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
     }
+=======
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class HomeController extends Controller
+{
+    public function index()
+    {
+        return view('home');
+    }
+    public function ValidLink($url) {
+
+        $regular = '/^(http:\/\/|https:\/\/)?[\w]+(\.{1}[\w]+)+(\S*)$/';
+
+        if (strlen($url) < 2048 && $check = preg_match($regular, $url)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+>>>>>>> 982bb096b500376e494a7a4a74c0f127de479852
 }
