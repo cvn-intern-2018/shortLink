@@ -6,17 +6,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use App\Url;
 
 class HomeController extends Controller
 {
+
     public function index()
     {
-
-        // $url = Url::all();
-
-        // $this->debug_to_console($url);
-
         return view('home');
     }
 
@@ -27,12 +24,6 @@ class HomeController extends Controller
         $this->debug_to_console($urls);
     }
 
-    // public function index()
-    // {
-    //     $url = 'https://github.com/cotdp/php-rc4/blob/master/rc4.php';
-    //     $original_url = Url::where('url_original', $url)->get()->toJson();//or toArray or
-    //     var_dump($original_url);
-    // }
 
     public function getURLShortener()
     {
@@ -41,10 +32,6 @@ class HomeController extends Controller
         var_dump($original_url);
     }
 
-    public function addURLShortener()
-    {
-
-    }
 
     public function ValidLink($url)
     {
@@ -68,7 +55,8 @@ class HomeController extends Controller
     }
 
     public function encode($id) {
-        $alphabet='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.';
+        $alphabet='abcdefghijlmnopqrstuvwxyzABCDEGHIJKLMNOPQRSTUVWXZ012345789-';
+        $addition = 'kY6F';
         $length = strlen($alphabet);
         $shortlink = '';
 
@@ -77,9 +65,9 @@ class HomeController extends Controller
             $id = (int)($id / $length);
         }
         while(strlen($shortlink) < 6) {
-            $shortlink = '0' .$shortlink;
+            $shortlink = $addition[rand(0,strlen($addition)-1)] .$shortlink;
         }
-        $shortlink = $alphabet[rand(0,63)] . $shortlink;
+        $shortlink = $alphabet[rand(0,strlen($alphabet)-1)] . $shortlink;
         return  $shortlink;
 
     }
@@ -87,29 +75,32 @@ class HomeController extends Controller
     public function short(Request $req)
     {
         $old_id = DB::table('url')->max('id');
-
-        // $domain = "http://cus.dev.cybozu.xyz/";
-        $short = HomeController::encode($old_id + 1);
-        $short_url =  $short;
-
-        $custom_url = $req->custom_url;
+        $short_url = HomeController::encode($old_id + 1);
+       
 
         $url = new Url();
 
-        if(empty($custom_url)) {
-            $url->url_original = $req->org_url;
-            $url->url_shorten =  $short_url;
-            $url->url_info = "OK";
+        $row = Url::where('url_original',$req->org_url)->get();
+         
+
+        if(count($row) > 0) {
+            return view('home',['data'=>$row]);
         }
         else {
-            $url->url_original = $req->org_url;
-            $url->url_shorten =  $custom_url;
-            $url->url_info = "OK";
+            if(empty($req->custom_url)) {
+                $url->url_original = $req->org_url;
+                $url->url_shorten =  $short_url;
+                $url->url_info = "OK";
+            }
+            else {
+                $url->url_original = $req->org_url;
+                $url->url_shorten =  $req->custom_url;
+                $url->url_info = "OK";
+            }
+            $url->save();
+            return redirect('data');
         }
 
-        $url->save();
-
-        return redirect('data');
     }
 
     public function returnData()
@@ -118,4 +109,6 @@ class HomeController extends Controller
         $data = Url::find($current_id);
         return view('home',['data'=>$data]);
     }
+
+    
 }
