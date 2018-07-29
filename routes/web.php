@@ -13,6 +13,7 @@
 //
 
 Route::get('/', 'HomeController@index');
+Route::get('data','HomeController@returnData');
 Route::get('chart', 'ChartController@index');
 
 Route::post('short','HomeController@short');

@@ -92,13 +92,30 @@ class HomeController extends Controller
         $short = HomeController::encode($old_id + 1);
         $short_url =  $short;
 
+        $custom_url = $req->custom_url;
+
         $url = new Url();
 
-        $url->url_original = $req->org_url;
-        $url->url_shorten =  $short_url;
-        $url->url_info = "OK";
+        if(empty($custom_url)) {
+            $url->url_original = $req->org_url;
+            $url->url_shorten =  $short_url;
+            $url->url_info = "OK";
+        }
+        else {
+            $url->url_original = $req->org_url;
+            $url->url_shorten =  $custom_url;
+            $url->url_info = "OK";
+        }
+
         $url->save();
 
-        return redirect('/');
+        return redirect('data');
+    }
+
+    public function returnData()
+    {
+        $current_id = DB::table('url')->max('id');
+        $data = Url::find($current_id);
+        return view('home',['data'=>$data]);
     }
 }

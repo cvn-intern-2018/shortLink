@@ -7864,7 +7864,7 @@ hr.shadowDown {
     /*text-align: right;*/
 }
 #result-short {
-    display: none;
+    display: block;
     color: wheat;
     text-align: left;
     width: 550px;

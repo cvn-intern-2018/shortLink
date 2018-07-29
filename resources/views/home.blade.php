@@ -29,20 +29,21 @@
                                     </div>
                                     <div class="customize form-group">
                                         <h4>Customize short URL (Optional)</h4>
-                                        <p>http://cus.dev.cybozu.xyz/</p><input type="text" id="custom_url" name="custom_url" placeholder="Customize URL here">
+                                        <p>http://cus.dev.cybozu.xyz/</p><input maxlength="20" type="text" id="custom_url" name="custom_url" placeholder="Max length is 20 letters">
                                     </div>
                                     <div class="btn-shorten form-group">
-                                        <button href="#" id="btn-shorten" type="submit" class="btn btn-info button" name="btn-shorten">Shorten</button>
+                                        <button  id="btn-shorten" type="submit" class="btn btn-info button" name="btn-shorten">Shorten</button>
                                     </div>
+                                    @if(isset($data))
                                     <div class="form-group" id="result-short">
                                         <h4>Original URL</h4>
-                                        <a class ="original-url" href="#">
-                                            https://web.archive.org/web/20111110004006/http://www.seomofo.com/experiments/title-and-h1-of-this-post-but-for-the-sake-of-keyword-prominence-stuffing-im-going-to-mention-it-again-using-various-synonyms-stemmed-variations-and-of-coursea-big-fat-prominent-font-size-heres-the-stumper-that-stumped-me-what-is-the-max-number-of-chars-in-a-url-that-google-is-willing-to-crawl-and-index-for-whatever-reason-i-thought-i-had-read-somewhere-that-googles-limit-on-urls-was-255-characters-but-that-turned-out-to-be-wrong-so-maybe-i-just-made-that-number-up-the-best-answer-i-could-find-was-this-quote-from-googles-webmaster-trends-analyst-john-mueller-we-can-certainly-crawl-and-index-urls-over-1000-characters-long-but-that-doesnt-mean-that-its-a-good-practice-the-setup-for-this-experiment-is-going-to-be-pretty-simple-im-going-to-edit-the-permalink-of-this-post-to-be-really-really-long-then-im-going-to-see-if-google-indexes-it-i-might-even-see-if-yahoo-and-bing-index-iteven-though-no-one-really-cares-what-those-assholes-are-doing-url-character-limits-unrelated-to-google-the-question-now-is-how-many-characters-should-i-make-the-url-of-this-post-there-are-a-couple-of-sources-ill-reference-to-help-me-make-this-decision-the-first-is-this-quote-from-the-microsoft-support-pages-microsoft-internet-explorer-has-a-maximum-uniform-resource-locator-url-length-of-2083-characters-internet-explorer-also-has-a-maximum-path-length-of-2048-characters-this-limit-applies-to-both-post-request-and-get-request-urls-the-second-source-ill-cite-is-the-http-11-protocol-which-says-the-http-protocol-does-not-place-any-a-priori-limit-on-the-length-of-a-uri-servers-must-be-able-to-handle-the-uri-of-any-resource-they-serve-and-should-be-able-to-handle-uris-of-unbounded-length-if-they-provide-get-based-forms-that-could-generate-such-uris-a-server-should-return-414-request-uri-too-long-status-if-a-uri-is-longer.html
+                                        <a target="_blank" class ="original-url" href="{{$data->url_original}}">
+                                            {{$data->url_original}}
                                         </a>
                                         <h4>URL Shortener</h4>
                                         <div class="row shortURL">
                                             <div class="col-md-8">
-                                                <a href="#" id="short_generate">http://cus.dev.cybozu.xyz/abcdef</a>
+                                                <a target="_blank" href="{{$data->url_original}}" id="short_generate">http://cus.dev.cybozu.xyz/{{$data->url_shorten}}</a>
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
@@ -54,7 +55,7 @@
                                         <br/>
                                         <div class="row shortURL">
                                             <div class="col-md-8">
-                                                <a href="#" id="short_customize">http://cus.dev.cybozu.xyz/Customize</a>
+                                                <a target="_blank" href="#" id="short_customize">http://cus.dev.cybozu.xyz/Customize</a>
                                             </div>
                                             <div class="col-md-2">
                                                 <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
@@ -65,7 +66,7 @@
                                         </div>
 
                                     </div>
-
+                                    @endif
                                 </div>
 
                             </div>
