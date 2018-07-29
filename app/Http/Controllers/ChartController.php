@@ -9,6 +9,6 @@ class ChartController extends Controller
     //
     public function index()
     {
-        return view('chart.blade');
+        return view('chart');
     }
 }

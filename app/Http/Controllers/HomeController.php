@@ -10,15 +10,14 @@ use App\Url;
 
 class HomeController extends Controller
 {
-    public function index1()
+    public function index()
     {
-//        $url = url::table('url')->get();
 
-        $url = Url::all();
+        // $url = Url::all();
 
-        $this->debug_to_console($url);
+        // $this->debug_to_console($url);
 
-        return view('home', ['url' => 12314]);
+        return view('home');
     }
 
     public function getAllUrl()
@@ -28,12 +27,12 @@ class HomeController extends Controller
         $this->debug_to_console($urls);
     }
 
-    public function index()
-    {
-        $url = 'https://github.com/cotdp/php-rc4/blob/master/rc4.php';
-        $original_url = Url::where('url_original', $url)->get()->toJson();//or toArray or
-        var_dump($original_url);
-    }
+    // public function index()
+    // {
+    //     $url = 'https://github.com/cotdp/php-rc4/blob/master/rc4.php';
+    //     $original_url = Url::where('url_original', $url)->get()->toJson();//or toArray or
+    //     var_dump($original_url);
+    // }
 
     public function getURLShortener()
     {
@@ -89,9 +88,9 @@ class HomeController extends Controller
     {
         $old_id = DB::table('url')->max('id');
 
-        $domain = "http://cus.dev.cybozu.xyz/";
-        $short = home::encode($old_id + 1);
-        $short_url = $domain . $short;
+        // $domain = "http://cus.dev.cybozu.xyz/";
+        $short = HomeController::encode($old_id + 1);
+        $short_url =  $short;
 
         $url = new Url();
 
@@ -100,6 +99,6 @@ class HomeController extends Controller
         $url->url_info = "OK";
         $url->save();
 
-        return redirect('home');
+        return redirect('/');
     }
 }
