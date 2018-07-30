@@ -13,9 +13,9 @@ class Url extends Migration
      */
     public function up()
     {
-        Schema::create('url', function (Blueprint $table){
+        Schema::create('url', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->text('url_original',2048);
+            $table->text('url_original', 2048);
             $table->string('url_shorten', 20);
             $table->tinyInteger('short_type');
             $table->longText('url_info');
