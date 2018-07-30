@@ -45,33 +45,24 @@
                                     @if(isset($data))
                                     <div class="form-group" id="result-short">
                                         <h4>Original URL</h4>
-                                        <a target="_blank" class ="original-url" href="{{$data->url_original}}">
-                                            {{$data->url_original}}
+                                        <a target="_blank" class ="original-url" href=" {{$data[0]->url_original}}">
+                                            {{$data[0]->url_original}}
                                         </a>
                                         <h4>URL Shortener</h4>
-                                        <div class="row shortURL">
-                                            <div class="col-md-8">
-                                                <a target="_blank" href="{{$data->url_original}}" id="short_generate">http://cus.dev.cybozu.xyz/{{$data->url_shorten}}</a>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
-                                            </div>
-                                        </div >
-                                        <br/>
-                                        <div class="row shortURL">
-                                            <div class="col-md-8">
-                                                <a target="_blank" href="#" id="short_customize">http://cus.dev.cybozu.xyz/Customize</a>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
-                                            </div>
-                                        </div>
+                                        @foreach ($data as $dt)
+                                            <div class="row shortURL">
+                                                <div class="col-md-8">
+                                                <a target="_blank" href="{{$dt->url_original}}" id="short_generate">http://cus.dev.cybozu.xyz/{{$dt->url_shorten}}</a>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+                                                </div>
+                                            </div >
+                                            <br/>
+                                        @endforeach
 
                                     </div>
                                     @endif

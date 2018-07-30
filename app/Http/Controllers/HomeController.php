@@ -47,8 +47,8 @@ class HomeController extends Controller
     }
 
     public function encode($id) {
-        $alphabet = 'abcdefghijlmnopqrstuvwxyzABCDEGHIJKLMNOPQRSTUVWXZ012345789-';
-        $addition = 'kY6F';
+        $alphabet = 'abcdefghilmnopqrstuvwxyzABCDEGHIJKLMNOPQRSTUVWXZ012345789-';
+        $addition = 'kjY6F';
         $length = strlen($alphabet);
         $shortlink = '';
 
@@ -67,67 +67,55 @@ class HomeController extends Controller
     public function short(Request $req)
     {
         $old_id = DB::table('url')->max('id');
+        // print_r($old_id);die;
         $short_url = HomeController::encode($old_id + 1);
        
-
         $url = new Url();
-
-        $row = Url::where('url_original',$req->org_url)->get();
 
         if(!HomeController::validateLink($req->org_url)) {
             $invalid_url = "Invalid URL";
             return view('home', ['invalid_url' => $invalid_url]);
         }
-        if(count($row) > 0) {
-            if(empty($req->custom_url)) {
-                $id = DB::table('url')->where('url_original', $req->org_url)->value('id');
-                $row = Url::find($id);
+
+        if(empty($req->custom_url)) {
+            $row = Url::where('url_original',$req->org_url)->get();
+            if(count($row) > 0) {
                 return view('home', ['data' => $row]);
             }
             else {
-                $row_custom = Url::where('url_shorten', $req->custom_url)->get();
-                if(count($row_custom) > 0) {
-                    $notify_error = "This link already existed. Please choose another short link";
-                    return view('home', ['notify_error' => $notify_error]);
-                }
-                else {
-                    $url->url_original = $req->org_url;
-                    $url->url_shorten =  $req->custom_url;
-                    $url->url_info = "OK";
-                    $url->save();
-                    return redirect('data');
-                }                
+                $url->url_original = $req->org_url;
+                $url->url_shorten =  $short_url;
+                $url->short_type = 0;
+                $url->url_info = "";
             }
         }
         else {
-            if(empty($req->custom_url)) {
-                $url->url_original = $req->org_url;
-                $url->url_shorten =  $short_url;
-                $url->url_info = "OK";
+            $row_custom = Url::where('url_shorten', $req->custom_url)->get();
+            if(count($row_custom) > 0) {
+                $notify_error = "This link already existed. Please choose another short link";
+                return view('home', ['notify_error' => $notify_error]);
             }
             else {
-                $row_custom = Url::where('url_shorten', $req->custom_url)->get();
-                if(count($row_custom) > 0) {
-                    $notify_error = "This link already existed. Please choose another short link";
-                    return view('home', ['notify_error' => $notify_error]);
-                }
-                else {
-                    $url->url_original = $req->org_url;
-                    $url->url_shorten =  $req->custom_url;
-                    $url->url_info = "OK";
-                }
-                
+                $url->url_original = $req->org_url;
+                $url->url_shorten =  $req->custom_url;
+                $url->short_type = 1;
+                $url->url_info = ""; 
             }
-            $url->save();
-            return redirect('data');
         }
+        $url->save();
+        $current_id = DB::table('url')->max('id');
+        $data = Url::where('id',$current_id)->get();
+        return view('home', ['data' => $data]);
+        // return redirect('data');
+
     }
 
     public function returnData()
     {
         $current_id = DB::table('url')->max('id');
-        $data = Url::find($current_id);
+        $data = Url::where('id',$current_id)->get();
         return view('home', ['data' => $data]);
     }
+    
     
 }
