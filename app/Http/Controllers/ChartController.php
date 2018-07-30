@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class home extends Controller
+class ChartController extends Controller
 {
+    //
     public function index()
     {
-        return view('home');
+        return view('chart');
     }
 }

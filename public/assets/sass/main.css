@@ -306,7 +306,7 @@
 }
 
 .header2 .intro{
-    min-height: 100vh; 
+    min-height: 100vh;
     background-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -1827,15 +1827,18 @@
 .header8 {
     position: relative;
     background-color: #01BF86;
-    background: url('../images/header8.jpg') no-repeat scroll center 69px / cover ;
+    background: url('../images/header8.jpg') no-repeat center ;
+    background-size: cover ,
+    contain;
     font-family: 'Titillium Web', sans-serif;
+    max-width: 100%;
 }
 
 .header8 .intro{
     min-height: 100vh;
     background-color: rgba(1, 191, 134, 0.75);
-    padding-bottom: 70px;
-    padding-top: 70px;
+    padding-bottom: 50px;
+    padding-top: 50px;
 }
 
 .header8 .email{
@@ -1887,7 +1890,7 @@
     border: 1px solid transparent;
     border-radius: 3px;
     box-shadow: none;
-    font-size: 13px;
+    font-size: 20px;
     height: 45px;
     color: #fff;
     margin-top: 10px;
@@ -6815,7 +6818,7 @@ hr.shadowDown {
 	background-position: top center;
 	border-bottom: 1px solid #D9D9D9;	
 	background-color: rgba(244, 244, 244, 1); 
-	background: url(../images/overlap.png); 
+	background: url(../images/overlap.png);
 }
 
 .contact2.form-group{ 
@@ -7837,4 +7840,107 @@ hr.shadowDown {
 @media (max-width: 546.98px) {
     .footer8 p { width: 100%; text-align: center; }
     .footer8 p:not(:first-child) { margin-top: 10px; }
+}
+/*-----------------------------------------------------*/
+.intro .customize {
+    color: wheat;
+    text-align: left;
+}
+.intro .customize p{
+    display: inline;
+    font-size: 16px;
+    color: white;
+}
+.intro .customize input{
+    min-width: 388px;
+    font-size: 15px;
+    background-color: #6d5858;
+    border: 1px solid #8383a7;
+
+}
+.intro .btn-shorten {
+    margin-top: 20px;
+    display: block;
+    /*text-align: right;*/
+}
+#result-short {
+    display: block;
+    color: wheat;
+    text-align: left;
+    width: 550px;
+    margin: 0 auto;
+    border-left: 4px groove #daa8a8;
+    padding-left: 15px;
+
+}
+#result-short .original-url {
+    text-overflow: ellipsis;
+
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
+}
+#result-short a {
+    color: white;
+    font-size: 16px;
+    display: block;
+}
+.shortURL i {
+    background-color: #87bd27;
+    font-size: 20px;
+    padding: 5px 30px 5px 30px;
+    border-radius: 5px;
+}
+.graph-chart img{
+    margin-top: 50px;
+    width: 100%;
+}
+.chart .intro .info-url {
+    color: wheat;
+    text-align: left;
+    display: block;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.chart .intro .info-url:last-child {
+    margin-bottom: 0px;
+}
+.chart .intro .info-url h5{
+    display: list-item;
+}
+.chart .intro .info-url p{
+    color: #ffffff;
+    display: inline;
+}
+.chart .intro .info-url a{
+    color: #ffffff;
+    display: inline-block;
+}
+.chart .group-info-chart{
+    border-left: 4px groove #daa8a8;
+}
+.chart .info-url a
+{
+    text-overflow:ellipsis;
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}
+.info-url .icon-copy {
+    font-size: 20px;
+    padding: 10px 15px 10px 15px;
+    background-color: #688490;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.graph-chart {
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+}
+.graph-chart .cbb-time {
+    margin-top: 30px;
 }

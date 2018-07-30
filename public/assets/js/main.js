@@ -8,7 +8,7 @@
 
 (function($){
 	$(window).load(function(){
-		
+
         /*	FlexSlide text
         /*----------------------------------------------------*/
 		$('.flexslider').flexslider({
@@ -53,23 +53,45 @@
             $this.find('span.minutes').html(event.strftime('%M'));
             $this.find('span.seconds').html(event.strftime('%S'));
         });
-        
+
 	});
-    
+
     /*	slideshow1 ( nivo Slider )
     /*----------------------------------------------------*/
     $(function(){
 
             startSlideshow();
 
-        })
+        });
 
-        function startSlideshow() {
+    function startSlideshow() {
 
-            $('#nivoSlider').nivoSlider({
-                effect: 'slideInRight'
-            });
+        $('#nivoSlider').nivoSlider({
+            effect: 'slideInRight'
+        });
 
-        }
-    
+    }
+    // $(function() {
+
+    //     $("#btn-shorten").on("click", function() {
+
+    //         // $("#result-short").toggle();
+    //         document.getElementById("result-short").style.display = "block";
+    //         $("#frm-short").animate({height: '500px', opacity: '0.9'}, "slow");
+    //     });
+
+    // });
+
+    // $('.shortURL-click').click(function () {
+    //
+    //     //var $url_original= this().data('data-url-shorten');
+    //     alert($(this).data('url-shorten'));
+    //     //alert('xxxx');
+    //
+    // })
+    // function updateUrlInfo($url_original) {
+    //
+    //     alert($url_original);
+    //
+    // };
 })(jQuery);
