@@ -15,9 +15,7 @@ Route::get('/', 'home@index');
 Route::post('short','home@short');
 
 Route::get('encode/{id}','home@encode');
-Route::get('chart', 'chart@index');
-
-
+Route::get('/chart', 'ChartController@index');
 
 
 Route::get('/demo','ControllerUrl@function1');
