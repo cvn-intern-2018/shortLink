@@ -12,18 +12,22 @@
                 </div>
             </div>
         </nav>
-
+        
         <div class="intro center-content">
             <div class="container">
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
                         <div class="email text-center"><i class="fa fa-link" aria-hidden="true"></i></div>
-                        {{-- <p class="tag-line text-center">Quality, more value of a link</p> --}}
                         <h1 class="pull-stop text-center">Cybozu URL Shortener</h1>
                         <form class="login-reg subscribe text-center form-inline" id="frm-short" method="post" action="short">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <div class="row margin-bottom-0">
                                 <div class="col-md-12 col-sm-12">
+                                    @if (isset($invalid_url))
+                                    <div style="color:red">
+                                        {{$invalid_url}}
+                                    </div>
+                                    @endif
                                     <div class="form-group">
                                         <input type="text" class="form-control input-lg" id="org_url" placeholder="Your URL here" name="org_url" required>
                                     </div>
@@ -31,6 +35,10 @@
                                         <h4>Customize short URL (Optional)</h4>
                                         <p>http://cus.dev.cybozu.xyz/</p><input maxlength="20" type="text" id="custom_url" name="custom_url" placeholder="Max length is 20 letters">
                                     </div>
+                                    @if (isset($notify_error))
+                                        <p style="color:yellow">{{$notify_error}}</p>
+                                    @endif
+
                                     <div class="btn-shorten form-group">
                                         <button  id="btn-shorten" type="submit" class="btn btn-info button" name="btn-shorten">Shorten</button>
                                     </div>
