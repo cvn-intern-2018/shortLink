@@ -7859,7 +7859,7 @@ hr.shadowDown {
 
 }
 .intro .btn-shorten {
-    margin-top: 20px;
+    margin-top: 10px;
     display: block;
     /*text-align: right;*/
 }
@@ -7943,4 +7943,11 @@ hr.shadowDown {
 }
 .graph-chart .cbb-time {
     margin-top: 30px;
+}
+#short-notify {
+    display: inline;
+}
+#short-notify p{
+    padding-top: 10px;
+    margin-bottom: -10px;
 }

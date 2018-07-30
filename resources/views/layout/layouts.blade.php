@@ -3,6 +3,7 @@
     <meta charset="utf-8">
     <title>Shorter Link</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Loading Bootstrap -->
     <link href="assets/sass/bootstrap.css" rel="stylesheet">
     <!-- Edit CSS -->
