@@ -73,7 +73,11 @@ class HomeController extends Controller
         echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
     }
 
-
+    /**
+     * Short URL
+     * @param $id
+     * @return string
+     */
     public function encode($id)
     {
         $alphabet = 'abcdefghilmnopqrstuvwxyzABCDEGHIJKLMNOPQRSTUVWXZ012345789-';
@@ -85,15 +89,19 @@ class HomeController extends Controller
             $shortlink = $shortlink . $alphabet[(int)($id % $length)];
             $id = (int)($id / $length);
         }
-        while (strlen($shortlink) < 6) {
+        while (strlen($shortlink) < 7) {
             $shortlink = $addition[rand(0, strlen($addition) - 1)] . $shortlink;
         }
-        $shortlink = $alphabet[rand(0, strlen($alphabet) - 1)] . $shortlink;
         return $shortlink;
 
     }
 
-    public function short(Request $req)
+    /**
+     * Short URL
+     * @param Request $req
+     * @return view
+     */
+    public function shortURL(Request $req)
     {
         $old_id = DB::table('url')->max('id');
         // print_r($old_id);die;
@@ -108,9 +116,10 @@ class HomeController extends Controller
         }
 
         if (empty($req->custom_url)) {
-            $row = Url::where('url_original', $req->org_url)->get();
+            $row = Url::where('url_original', $req->org_url)->where('short_type', 0)->get();
             if (count($row) > 0) {
-                return view('home', ['data' => $row]);
+                 $row_data = Url::where('url_original', $req->org_url)->get();
+                return view('home', ['data' => $row_data]);
             } else {
                 $url->url_original = $req->org_url;
                 $url->url_shorten = $short_url;
@@ -134,16 +143,9 @@ class HomeController extends Controller
         $current_id = DB::table('url')->max('id');
         $data = Url::where('id', $current_id)->get();
         return view('home', ['data' => $data]);
-        // return redirect('data');
 
     }
 
-    public function returnData()
-    {
-        $current_id = DB::table('url')->max('id');
-        $data = Url::where('id', $current_id)->get();
-        return view('home', ['data' => $data]);
-    }
 
     /**
      * Get type of browser
@@ -159,9 +161,8 @@ class HomeController extends Controller
         elseif (strpos($user_agent, 'Edge')) return EDGE;
         elseif (strpos($user_agent, 'MSIE') || strpos($user_agent, 'Trident/7')) return EXPLORER;
         return OTHERS;
-
-
     }
+
 
     public function ajaxHome()
     {

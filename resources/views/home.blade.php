@@ -55,7 +55,7 @@
                                                             <a target="_blank" onclick="myFunction()" href="{{$dt->url_original}}" >http://cus.dev.cybozu.xyz/{{$dt->url_shorten}}</a>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
+                                                            <a id="btnCopy" data-copy-string="http://cus.dev.cybozu.xyz/{{$dt->url_shorten}}"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
                                                         </div>
                                                         <div class="col-md-2">
                                                             <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
@@ -88,4 +88,45 @@
             </div>
         </footer>
     </div><!-- /#page -->
+@endsection
+
+
+
+@section('script')
+    <script type="text/javascript">
+        
+        function fallbackCopyTextToClipboard(text) {
+          var textArea = document.createElement("textarea");
+          textArea.value = text;
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+
+          try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Fallback: Copying text command was ' + msg);
+          } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+          }
+
+          document.body.removeChild(textArea);
+        }
+        
+        function copyTextToClipboard(text) {
+          if (!navigator.clipboard) {
+              fallbackCopyTextToClipboard(text);
+              return;
+          }
+          navigator.clipboard.writeText(text).then(function() {
+              console.log('Async: Copying to clipboard was successful!');
+          }, function(err) {
+              console.error('Async: Could not copy text: ', err);
+          });
+        }
+
+        $("#btnCopy").click(function() {
+            copyTextToClipboard($(this).data('copy-string'));
+        });
+    </script>
 @endsection

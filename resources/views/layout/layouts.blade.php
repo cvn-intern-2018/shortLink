@@ -21,16 +21,17 @@
     @yield('body')
 <!--=== Load JS here for greater good ====-->
     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="assets/js/jquery-1.8.3.min.js"></script>
+    <script src="assets/js/jquery-1.8.3.min.js"></script>
     <script src="assets/js/ajaxHome.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script src="assets/js/isotope.pkgd.js"></script>
-<script src="assets/js/jquery.countdown.min.js"></script>
-<script src="assets/js/jquery.flexslider.js"></script>
-<script src="assets/js/jquery.nivo.slider.pack.js"></script>
-<script src="assets/js/portfolio-custom1.js"></script>
-<script src="assets/js/portfolio-custom2.js"></script>
-<script src="assets/js/main.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/isotope.pkgd.js"></script>
+    <script src="assets/js/jquery.countdown.min.js"></script>
+    <script src="assets/js/jquery.flexslider.js"></script>
+    <script src="assets/js/jquery.nivo.slider.pack.js"></script>
+    <script src="assets/js/portfolio-custom1.js"></script>
+    <script src="assets/js/portfolio-custom2.js"></script>
+    <script src="assets/js/main.js"></script>
+    @yield('script')
 
 
 </body>
