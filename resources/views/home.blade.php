@@ -8,8 +8,7 @@
             <nav role="navigation" class="navbar navbar-default">
                 <div class="container">
                     <div class="navbar-header">
-                        <a href="#" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40"
-                                                                    width="50"><span>Cybozu</span><span>Company</span></a>
+                        <a href="#" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40" width="50"><span>Cybozu</span><span>Company</span></a>
                     </div>
                 </div>
             </nav>
@@ -20,8 +19,7 @@
                         <div class="col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
                             <div class="email text-center"><i class="fa fa-link" aria-hidden="true"></i></div>
                             <h1 class="pull-stop text-center">Cybozu URL Shortener</h1>
-                            <form class="login-reg subscribe text-center form-inline" id="frm-short" method="post"
-                                  action="short">
+                            <form class="login-reg subscribe text-center form-inline" id="frm-short" method="post" action="short">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="row margin-bottom-0">
                                     <div class="col-md-12 col-sm-12">
@@ -31,47 +29,38 @@
                                             </div>
                                         @endif
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-lg" id="org_url"
-                                                   placeholder="Your URL here" name="org_url" required>
+                                            <input type="text" class="form-control input-lg" id="org_url" placeholder="Your URL here" name="org_url" required>
                                         </div>
                                         <div class="customize form-group">
                                             <h4>Customize short URL (Optional)</h4>
-                                            <p>http://cus.dev.cybozu.xyz/</p><input maxlength="20" type="text"
-                                                                                    id="custom_url" name="custom_url"
-                                                                                    placeholder="Max length is 20 letters">
+                                            <p>http://cus.dev.cybozu.xyz/</p><input maxlength="20" type="text" id="custom_url" name="custom_url" placeholder="Max length is 20 letters">
                                         </div>
                                         @if (isset($notify_error))
                                             <p style="color:yellow">{{$notify_error}}</p>
                                         @endif
 
                                         <div class="btn-shorten form-group">
-                                            <button id="btn-shorten" type="submit" class="btn btn-info button"
-                                                    name="btn-shorten">Shorten
-                                            </button>
+                                            <button  id="btn-shorten" type="submit" class="btn btn-info button" name="btn-shorten">Shorten</button>
                                         </div>
                                         @if(isset($data))
                                             <div class="form-group" id="result-short">
                                                 <h4>Original URL</h4>
-                                                <a target="_blank" class="original-url"
-                                                   href=" {{$data[0]->url_original}}">
+                                                <a target="_blank" class ="original-url" href=" {{$data[0]->url_original}}">
                                                     {{$data[0]->url_original}}
                                                 </a>
                                                 <h4>URL Shortener</h4>
                                                 @foreach ($data as $dt)
                                                     <div class="row shortURL">
                                                         <div class="col-md-8 shortURL-click">
-                                                            <a target="_blank"
-                                                               onclick="updateUrlInfo('{{$dt->url_shorten}}')" href="{{$dt->url_original}}" >http://cus.dev.cybozu.xyz/{{$dt->url_shorten}}</a>
+                                                            <a target="_blank" onclick="updateUrlInfo('{{$dt->url_shorten}}')"  href="{{$dt->url_original}}" >http://cus.dev.cybozu.xyz/{{$dt->url_shorten}}</a>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <a href="#"><i class="fa fa-files-o" aria-hidden="true"
-                                                                           style="background-color: #688490"></i></a>
+                                                            <a id="btnCopy" data-copy-string="http://cus.dev.cybozu.xyz/{{$dt->url_shorten}}"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <a href="#"><i class="fa fa-bar-chart"
-                                                                           aria-hidden="true"></i></a>
+                                                            <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
                                                         </div>
-                                                    </div>
+                                                    </div >
                                                     <br/>
                                                 @endforeach
 
@@ -99,4 +88,42 @@
             </div>
         </footer>
     </div><!-- /#page -->
+@endsection
+
+
+
+@section('script')
+    <script type="text/javascript">
+
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Fallback: Copying text command was ' + msg);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function copyTextToClipboard(text) {
+            if (!navigator.clipboard) {
+                fallbackCopyTextToClipboard(text);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function() {
+                console.log('Async: Copying to clipboard was successful!');
+            }, function(err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        }
+        $("#btnCopy").click(function() {
+            copyTextToClipboard($(this).data('copy-string'));
+        });
+    </script>
 @endsection
