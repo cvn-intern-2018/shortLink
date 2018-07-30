@@ -71,15 +71,15 @@
         });
 
     }
-    $(function() {
+    // $(function() {
 
-        $("#btn-shorten").on("click", function() {
+    //     $("#btn-shorten").on("click", function() {
 
-            // $("#result-short").toggle();
-            document.getElementById("result-short").style.display = "block";
-            $("#frm-short").animate({height: '500px', opacity: '0.9'}, "slow");
-        });
+    //         // $("#result-short").toggle();
+    //         document.getElementById("result-short").style.display = "block";
+    //         $("#frm-short").animate({height: '500px', opacity: '0.9'}, "slow");
+    //     });
 
-    });
+    // });
 
 })(jQuery);
