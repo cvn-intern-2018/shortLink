@@ -82,4 +82,15 @@
 
     // });
 
+    // $('.shortURL-click').click(function () {
+    //
+    //     //var $url_original= this().data('data-url-shorten');
+    //     //alert($(this).data('url-shorten'));
+    //     alert('xxxx');
+    //
+    // })
+    function myFunction($a) {
+        alert($a);
+    }
+
 })(jQuery);

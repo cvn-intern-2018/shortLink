@@ -22,7 +22,6 @@ class Url extends Migration
             $table->timestamp('created_at');
             $table->unique('url_shorten');
 
-
         });
     }
 
