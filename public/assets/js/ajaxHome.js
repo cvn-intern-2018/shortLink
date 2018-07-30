@@ -1,26 +1,24 @@
-
-
-$(document).ready(function () {
-    $("#btn-shorten").click(function () {
-       /* $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });*/
-        /*$.ajax({
-            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            url:'/ajax',
-            method: 'POST',
-            data:'_token = <?php echo csrf_token() ?>',
-            success: function(response){ // What to do if we succeed
-                alert("xxx");
-            },
-            error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
-                console.log("AJAX error: " + textStatus + ' : ' + errorThrown);
-            }
-        });*/
-        $.get('ajax', function () {
-            alert('xxx');
-        })
-    });
-});
+//
+// $.ajaxSetup({
+//     headers: {
+//         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+//     }
+// });
+// $(document).ready(function () {
+//     $("#btn-shorten").click(function () {
+//
+//         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content')
+//         $.ajax({
+//             url:'ajax',
+//             type: 'POST',
+//             data: {_token: CSRF_TOKEN},
+//             success: function($data){ // What to do if we succeed
+//                 alert('ssss');
+//             },
+//             error: function(jqXHR, textStatus, errorThrown) { // What to do if we fail
+//                alert(textStatus);
+//             }
+//         });
+//
+//     });
+// });

@@ -6,14 +6,15 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use App\Url;
+use Illuminate\Support\Facades\View;
 
 define('CHROME', 1);
 define('FIREFOX', 2);
 define('SAFARI', 3);
 define('OPERA', 4);
 define('EDGE', 5);
-define('EXPLORER',6);
-define('OTHERS',0);
+define('EXPLORER', 6);
+define('OTHERS', 0);
 
 
 class HomeController extends Controller
@@ -24,14 +25,6 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function getAllUrl()
-    {
-        $urls = Url::all();
-
-        $this->debug_to_console($urls);
-    }
-
-
     public function getURLShortener()
     {
         $url = 'https://github.com/cotdp/php-rc4/blob/master/rc4.php';
@@ -39,13 +32,32 @@ class HomeController extends Controller
         var_dump($original_url);
     }
 
-
-    public function ValidLink($url)
+    /**
+     * Validate url
+     * @param String $url
+     * @return bool
+     */
+    public function validateLink($url)
     {
-
         $regular = '/^(http:\/\/|https:\/\/)?[\w]+(\.{1}[\w]+)+(\S*)$/';
 
         if (strlen($url) < 2048 && $check = preg_match($regular, $url)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    /**
+     * Validate Customize input
+     * @param $string
+     * @return bool
+     */
+    public function validateCustomizeInput($string)
+    {
+        $regular ='/[a-zA-Z0-9]{1,20}/';
+        if ($check = preg_match($regular, $string)) {
             return true;
         } else {
             return false;
@@ -61,21 +73,22 @@ class HomeController extends Controller
         echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
     }
 
-    public function encode($id) {
-        $alphabet='abcdefghijlmnopqrstuvwxyzABCDEGHIJKLMNOPQRSTUVWXZ012345789-';
+    public function encode($id)
+    {
+        $alphabet = 'abcdefghijlmnopqrstuvwxyzABCDEGHIJKLMNOPQRSTUVWXZ012345789-';
         $addition = 'kY6F';
         $length = strlen($alphabet);
         $shortlink = '';
 
-        while($id > 0) {
-            $shortlink = $shortlink .$alphabet[(int)($id % $length)]  ;
+        while ($id > 0) {
+            $shortlink = $shortlink . $alphabet[(int)($id % $length)];
             $id = (int)($id / $length);
         }
-        while(strlen($shortlink) < 6) {
-            $shortlink = $addition[rand(0,strlen($addition)-1)] .$shortlink;
+        while (strlen($shortlink) < 6) {
+            $shortlink = $addition[rand(0, strlen($addition) - 1)] . $shortlink;
         }
-        $shortlink = $alphabet[rand(0,strlen($alphabet)-1)] . $shortlink;
-        return  $shortlink;
+        $shortlink = $alphabet[rand(0, strlen($alphabet) - 1)] . $shortlink;
+        return $shortlink;
 
     }
 
@@ -83,43 +96,70 @@ class HomeController extends Controller
     {
         $old_id = DB::table('url')->max('id');
         $short_url = HomeController::encode($old_id + 1);
-       
+
 
         $url = new Url();
 
-        $row = Url::where('url_original',$req->org_url)->get();
-         
+        $row = Url::where('url_original', $req->org_url)->get();
 
-        if(count($row) > 0) {
-            return view('home',['data'=>$row]);
+        if (!HomeController::validateLink($req->org_url)) {
+            $invalid_url = "Invalid URL";
+            return view('home', ['invalid_url' => $invalid_url]);
         }
-        else {
-            if(empty($req->custom_url)) {
-                $url->url_original = $req->org_url;
-                $url->url_shorten =  $short_url;
-                $url->url_info = "OK";
+        if (count($row) > 0) {
+            if (empty($req->custom_url)) {
+                $id = DB::table('url')->where('url_original', $req->org_url)->value('id');
+                $row = Url::find($id);
+                return view('home', ['data' => $row]);
+            } else {
+                $row_custom = Url::where('url_shorten', $req->custom_url)->get();
+                if (count($row_custom) > 0) {
+                    $notify_error = "This link already existed. Please choose another short link";
+                    return view('home', ['notify_error' => $notify_error]);
+                } else {
+                    $url->url_original = $req->org_url;
+                    $url->url_shorten = $req->custom_url;
+                    $url->url_info = "OK";
+                    $url->save();
+                    return redirect('data');
+                }
             }
-            else {
+        } else {
+            if (empty($req->custom_url)) {
                 $url->url_original = $req->org_url;
-                $url->url_shorten =  $req->custom_url;
+                $url->url_shorten = $short_url;
                 $url->url_info = "OK";
+            } else {
+                $row_custom = Url::where('url_shorten', $req->custom_url)->get();
+                if (count($row_custom) > 0) {
+                    $notify_error = "This link already existed. Please choose another short link";
+                    return view('home', ['notify_error' => $notify_error]);
+                } else {
+                    $url->url_original = $req->org_url;
+                    $url->url_shorten = $req->custom_url;
+                    $url->url_info = "OK";
+                }
+
             }
             $url->save();
             return redirect('data');
         }
-
     }
 
     public function returnData()
     {
         $current_id = DB::table('url')->max('id');
         $data = Url::find($current_id);
-        return view('home',['data'=>$data]);
+        return view('home', ['data' => $data]);
     }
 
-    public function getBrowser(){
+    /**
+     * Get type of browser
+     * */
+    public function getBrowser()
+    {
 
-        $user_agent =$_SERVER['HTTP_USER_AGENT'];
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
         if (strpos($user_agent, 'Chrome')) return CHROME;
         elseif (strpos($user_agent, 'Firefox')) return FIREFOX;
         elseif (strpos($user_agent, 'Safari')) return SAFARI;
@@ -131,10 +171,8 @@ class HomeController extends Controller
 
     }
 
-    public function ajaxHome(){
-        $msg = "This is a simple message.";
-        return response()->json(array('msg'=> $msg), 200);
+    public function ajaxHome()
+    {
 
     }
-    
 }
