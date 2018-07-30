@@ -15,3 +15,11 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 Route::get('/', 'home@index');
+
+
+
+
+
+Route::get('demo/{s1}/{s2}', function ($s2){
+    echo '-'.$s2;
+});
