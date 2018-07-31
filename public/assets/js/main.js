@@ -71,6 +71,6 @@
         var  htmlResult = `<p style="color:yellow"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;` + data + `</p>`;
         document.getElementById("short-notify").innerHTML = htmlResult;
         document.getElementById("result-short").innerHTML = '';
-
     }
+
 })(jQuery);

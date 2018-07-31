@@ -47,7 +47,6 @@
 
                             </form>
                         </div>
-
                     </div><!-- row -->
 
                 </div><!-- intro -->

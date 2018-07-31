@@ -7900,6 +7900,7 @@ hr.shadowDown {
     font-size: 20px;
     padding: 5px 30px 5px 30px;
     border-radius: 5px;
+    margin-left: 20px;
 }
 .graph-chart img{
     margin-top: 50px;

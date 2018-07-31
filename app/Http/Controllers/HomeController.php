@@ -114,7 +114,6 @@ class HomeController extends Controller
 
         if (!HomeController::validateLink($req->org_url)) {
             $notify_error = "Invalid URL";
-//            return view('home', ['invalid_url' => $invalid_url]);
             return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
         }
 
@@ -122,7 +121,6 @@ class HomeController extends Controller
             $row = Url::where('url_original', $req->org_url)->where('short_type', 0)->get();
             if (count($row) > 0) {
                  $row_data = Url::where('url_original', $req->org_url)->get();
-//                return view('home', ['data' => $row_data]);
                 $isError = false;
                 return response()->json(['data' =>  $row_data ,'isError' =>  $isError]);
             } else {
@@ -135,7 +133,7 @@ class HomeController extends Controller
             $row_custom = Url::where('url_shorten', $req->custom_url)->get();
             if (count($row_custom) > 0) {
                 $notify_error = "This link already existed. Please choose another short link";
-//                return view('home', ['notify_error' => $notify_error]);
+
                 $isError = true;
                 return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
             } else {
@@ -148,10 +146,8 @@ class HomeController extends Controller
         $url->save();
         $current_id = DB::table('url')->max('id');
         $data = Url::where('id', $current_id)->get();
-//        return view('home', ['data' => $data]);
         $isError = false;
         return response()->json(['data' =>  $data ,'isError' =>  $isError]);
-
     }
 
 
