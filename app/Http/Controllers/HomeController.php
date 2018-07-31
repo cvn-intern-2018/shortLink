@@ -184,17 +184,17 @@ class HomeController extends Controller
             ->where('browser', 211)
             ->first();
         $time = date('YmdHis');
-        if (!isset($access)) {
+        if (isset($access)) {
 
             $access->id = $id;
             $access->browser = $browser;
             $access->clicked_time = $browser.$time;
-           // $access->save();
+            $access->save();
         } else {
             $access->clicked_time =  $access->clicked_time.' '.$browser.$time;
-           // $access->save();
+            $access->save();
         }
-        $access->save();
+        //$access->save();
         return response()->json(['data' =>  $access]);
     }
 
