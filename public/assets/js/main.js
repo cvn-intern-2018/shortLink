@@ -43,10 +43,12 @@
                                     <a target="_blank" href="` + data[i].url_original + `" id="short_generate">http://cus.dev.cybozu.xyz/` + data[i].url_shorten + `</a>
                                </div>
                                 <div class="col-md-2">
-                                     <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
+                                     <a href="#">
+                                     <i class="fas fa-copy" style="background-color: #688490"></i>
+                                    </a>
                                 </div>
                                 <div class="col-md-2">
-                                     <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
+                                     <a href="#"><i class="fas fa-chart-bar"></i></i></a>
                                  </div>
                             </div>
                                `
