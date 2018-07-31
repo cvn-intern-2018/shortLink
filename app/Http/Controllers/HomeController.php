@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Access;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
@@ -176,21 +177,25 @@ class HomeController extends Controller
 
     public function updateUrlInfo(Request $request){
 
-        $url_shorten = $request->url_shorten;
-        $object = Url::where('url_shorten', $url_shorten)->first();
+        $id = $request->id;
+        $access = new Access();
         $browser = $this->getBrowser();
-        $time = date('Y-m-d H:i:s');
-//        $info = array(
-//            BROWSER => $browser,
-//            CREATED_AT => $time
-//        );
-//        if ($object->url_info == null) {
-//            $object->url_info = json_encode($info);
-//        } else {
-//            $object->url_info = $object->url_info . ',' . json_encode($info);
-//        }
-//        $object->save();
-        var_dump($object);
+        $access = Access::where('id',22)
+            ->where('browser', 211)
+            ->first();
+        $time = date('YmdHis');
+        if (!isset($access)) {
+
+            $access->id = $id;
+            $access->browser = $browser;
+            $access->clicked_time = $browser.$time;
+           // $access->save();
+        } else {
+            $access->clicked_time =  $access->clicked_time.' '.$browser.$time;
+           // $access->save();
+        }
+        $access->save();
+        return response()->json(['data' =>  $access]);
     }
 
     public function pageNotFound(){

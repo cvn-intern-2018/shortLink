@@ -1,5 +1,5 @@
-function updateUrlInfo($url_shorten) {
-    if ($url_shorten == null) {
+function updateUrlInfo($id) {
+    if ($id == null) {
         return;
     }
     $.ajaxSetup({
@@ -11,14 +11,13 @@ function updateUrlInfo($url_shorten) {
         type: 'POST',
         url: 'home/ajax/url',
         data: {
-            url_shorten: $url_shorten,
+            id: $id,
         },
         success: function (data) {
-            alert($url_shorten);
-            console.log(data);
+            console.log(data.data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
+            //console.log(textStatus);
         }
     });
 };
