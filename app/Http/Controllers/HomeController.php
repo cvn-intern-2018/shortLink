@@ -24,7 +24,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('home');
+        $domain = $_SERVER['SERVER_NAME'] ;
+        return view('home' ,['domain'=> $domain]);
     }
 
     public function getURLShortener()
@@ -73,7 +74,7 @@ class HomeController extends Controller
             $shortlink = $shortlink . $alphabet[(int)($id % $length)];
             $id = (int)($id / $length);
         }
-        while (strlen($shortlink) < 7) {
+        while (strlen($shortlink) < 6) {
             $shortlink = $addition[rand(0, strlen($addition) - 1)] . $shortlink;
         }
         return $shortlink;
@@ -87,46 +88,49 @@ class HomeController extends Controller
      */
     public function shortURL(Request $req)
     {
+        $isError = true;
+
         $old_id = DB::table('url')->max('id');
-        // print_r($old_id);die;
         $short_url = HomeController::encode($old_id + 1);
 
-
+        $domain = $_SERVER['SERVER_NAME'] ;
+       
         $url = new Url();
 
         if (!HomeController::validateLink($req->org_url)) {
-            $invalid_url = "Invalid URL";
-            return view('home', ['invalid_url' => $invalid_url]);
+            $notify_error = "Invalid URL";
+            return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
         }
 
-        if (empty($req->custom_url)) {
+        if (strlen($req->custom_url) == 0) {
             $row = Url::where('url_original', $req->org_url)->where('short_type', 0)->get();
             if (count($row) > 0) {
                  $row_data = Url::where('url_original', $req->org_url)->get();
-                return view('home', ['data' => $row_data]);
+                $isError = false;
+                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $domain]);
             } else {
                 $url->url_original = $req->org_url;
                 $url->url_shorten = $short_url;
                 $url->short_type = 0;
-                $url->url_info = "";
             }
         } else {
             $row_custom = Url::where('url_shorten', $req->custom_url)->get();
             if (count($row_custom) > 0) {
                 $notify_error = "This link already existed. Please choose another short link";
-                return view('home', ['notify_error' => $notify_error]);
+
+                $isError = true;
+                return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
             } else {
                 $url->url_original = $req->org_url;
                 $url->url_shorten = $req->custom_url;
                 $url->short_type = 1;
-                $url->url_info = "";
             }
         }
         $url->save();
         $current_id = DB::table('url')->max('id');
         $data = Url::where('id', $current_id)->get();
-        return view('home', ['data' => $data]);
-
+        $isError = false;
+        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $domain]);
     }
 
 
@@ -191,27 +195,15 @@ class HomeController extends Controller
         $object->save();
     }
 
-    public function  test(){
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $item = '';
-        switch(strpos($user_agent, $item)){
-            case 'Opera':
-                return OPERA;
-            case 'Edge': return EDGE;
-            case 'Chrome': return CHROME;
-            case 'Safari': return SAFARI;
-            case 'Firefox': return FIREFOX;
-            default : return OTHERS;
-        }
-//        if (strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR/')) return OPERA;
-//        elseif (strpos($user_agent, 'Edge')) return EDGE;
-//        elseif (strpos($user_agent, 'Chrome')) return CHROME;
-//        elseif (strpos($user_agent, 'Safari')) return  SAFARI;
-//        elseif (strpos($user_agent, 'Firefox')) return FIREFOX;
-//        elseif (strpos($user_agent, 'MSIE') || strpos($user_agent, 'Trident/7')) return EXPLORER;
-//
-//        return OTHERS;
-       //var_dump($user_agent);
+    public function pageNotFound(){
+        return  view('error.404');
+    }
+    public function test()
+    {
+        $url = Url::where('id', 1)->first();
+        $info = json_decode('[' . $url->url_info . ']');
+        var_dump($info);
+
     }
 
 }

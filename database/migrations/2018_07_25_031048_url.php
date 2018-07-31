@@ -22,14 +22,7 @@ class Url extends Migration
             $table->unique('url_shorten');
 
         });
-        Schema::create('access', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
-            $table->tinyInteger('browser');
-            $table->text('clicked_time');
-            $table->primary(['id', 'browser']);
-            $table->foreign('id')->references('id')->on('url');
 
-        });
     }
 
     /**
@@ -40,6 +33,6 @@ class Url extends Migration
     public function down()
     {
         Schema::dropIfExists('url');
-        Schema::dropIfExists('access');
+
     }
 }
