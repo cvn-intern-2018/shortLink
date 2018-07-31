@@ -18,9 +18,16 @@ class Url extends Migration
             $table->text('url_original', 2048);
             $table->string('url_shorten', 20);
             $table->tinyInteger('short_type');
-            $table->longText('url_info');
             $table->timestamp('created_at');
             $table->unique('url_shorten');
+
+        });
+        Schema::create('access', function (Blueprint $table) {
+            $table->bigInteger('id')->unsigned();
+            $table->tinyInteger('browser');
+            $table->text('clicked_time');
+            $table->primary(['id', 'browser']);
+            $table->foreign('id')->references('id')->on('url');
 
         });
     }
@@ -33,5 +40,6 @@ class Url extends Migration
     public function down()
     {
         Schema::dropIfExists('url');
+        Schema::dropIfExists('access');
     }
 }
