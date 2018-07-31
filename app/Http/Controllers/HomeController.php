@@ -189,7 +189,9 @@ class HomeController extends Controller
         }
         $object->save();
     }
-
+    public function pageNotFound(){
+        return  view('error.404');
+    }
     public function test()
     {
         $url = Url::where('id', 1)->first();
