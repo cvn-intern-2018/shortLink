@@ -159,15 +159,12 @@ class HomeController extends Controller
         }*/
 
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
-
-        var_dump($user_agent);
         if (strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR/')) return OPERA;
         elseif (strpos($user_agent, 'Edge')) return EDGE;
         elseif (strpos($user_agent, 'Chrome')) return CHROME;
         elseif (strpos($user_agent, 'Safari')) return  SAFARI;
         elseif (strpos($user_agent, 'Firefox')) return FIREFOX;
         elseif (strpos($user_agent, 'MSIE') || strpos($user_agent, 'Trident/7')) return EXPLORER;
-
         return OTHERS;
     }
 
@@ -183,16 +180,17 @@ class HomeController extends Controller
         $object = Url::where('url_shorten', $url_shorten)->first();
         $browser = $this->getBrowser();
         $time = date('Y-m-d H:i:s');
-        $info = array(
-            BROWSER => $browser,
-            CREATED_AT => $time
-        );
-        if ($object->url_info == null) {
-            $object->url_info = json_encode($info);
-        } else {
-            $object->url_info = $object->url_info . ',' . json_encode($info);
-        }
-        $object->save();
+//        $info = array(
+//            BROWSER => $browser,
+//            CREATED_AT => $time
+//        );
+//        if ($object->url_info == null) {
+//            $object->url_info = json_encode($info);
+//        } else {
+//            $object->url_info = $object->url_info . ',' . json_encode($info);
+//        }
+//        $object->save();
+        var_dump($object);
     }
 
     public function pageNotFound(){

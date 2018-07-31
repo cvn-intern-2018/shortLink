@@ -14,6 +14,7 @@ function updateUrlInfo($url_shorten) {
             url_shorten: $url_shorten,
         },
         success: function (data) {
+            alert($url_shorten);
             console.log(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
