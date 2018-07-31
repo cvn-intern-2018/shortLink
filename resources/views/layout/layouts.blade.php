@@ -2,11 +2,10 @@
 <head>
     <meta charset="utf-8">
     <title>Shorter Link</title>
-<<<<<<< HEAD
     <meta name="csrf-token" content="{{ csrf_token() }}">
-=======
+
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
->>>>>>> f9dac2c554eedcd5ab49312a9abe3c9a12b7408d
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Loading Bootstrap -->
     <link href="assets/sass/bootstrap.css" rel="stylesheet">
@@ -24,7 +23,7 @@
 </head>
 <body>
 @yield('body')
-<!--=== Load JS here for greater good ====-->
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="assets/js/jquery-1.8.3.min.js"></script>
 <script src="assets/js/home.js"></script>

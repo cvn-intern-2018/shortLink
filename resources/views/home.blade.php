@@ -28,7 +28,7 @@
                                         </div>
                                         <div class="customize form-group">
                                             <h4>Customize short URL (Optional)</h4>
-                                            <p>http://cus.dev.cybozu.xyz/</p><input maxlength="20" type="text" id="custom_url" name="custom_url" placeholder="Max length is 20 letters">
+                                            <p>{{ $domain }}/</p><input maxlength="20" type="text" id="custom_url" name="custom_url" placeholder="Max length is 20 letters">
                                         </div>
                                         <div class="form-group row" id="short-notify">
 

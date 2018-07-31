@@ -27,23 +27,22 @@
                     editHtmlFailure(result.data);
                 }
                 else {
-                    editHtmlSuccess(result.data);
+                    editHtmlSuccess(result.data, result.domain);
                 }
             },
         });
     });
-    function editHtmlSuccess(data) {
+    function editHtmlSuccess(data, domain) {
         var htmlResultShortten = '';
-
 
         for (i = 0; i < data.length ; i++) {
             htmlResultShortten += `
                             <div class="row item">
                                 <div class="col-md-8">
-                                    <a target="_blank" href="` + data[i].url_original + `" id="short_generate">http://cus.dev.cybozu.xyz/` + data[i].url_shorten + `</a>
+                                    <a target="_blank" href="` + data[i].url_original + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
                                </div>
                                 <div class="col-md-2">
-                                     <a href="#"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
+                                     <a id="btnCopy" data-copy-string="`+ domain + `/` + data[i].url_shorten +`"><i class="fa fa-files-o" aria-hidden="true" style="background-color: #688490"></i></a>
                                 </div>
                                 <div class="col-md-2">
                                      <a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i></a>
@@ -53,24 +52,25 @@
         }
         var htmlURLShortener = '';
         var htmlResult = `<div class="form-group">
-                                        <h4>Original URL</h4>
-                                        <a target="_blank" class ="original-url" href="` + data[0].url_original + `">
-                                           ` + data[0].url_original + `
-                                        </a>
-                                        <h4>URL Shortener</h4>
-                                        <div class="row shortURL">
-                                            ` + htmlResultShortten + ` 
-                                          
-                                        </div >
-                                        <br/>
-                                    </div>`;
+                            <h4>Original URL</h4>
+                            <a target="_blank" class ="original-url" href="` + data[0].url_original + `">
+                                ` + data[0].url_original + `
+                            </a>
+                            <h4>URL Shortener</h4>
+                            <div class="row shortURL">
+                                ` + htmlResultShortten + ` 
+                                
+                            </div >
+                            <br/>
+                        </div>`;
         document.getElementById("result-short").innerHTML = htmlResult;
         document.getElementById("short-notify").innerHTML = '';
     }
     function editHtmlFailure(data) {
-        var  htmlResult = `<p style="color:yellow"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;` + data + `</p>`;
+        var  htmlResult = `<p style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;` + data + `</p>`;
         document.getElementById("short-notify").innerHTML = htmlResult;
         document.getElementById("result-short").innerHTML = '';
     }
+    
 
 })(jQuery);

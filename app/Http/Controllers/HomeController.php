@@ -22,7 +22,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('home');
+        $domain = $_SERVER['SERVER_NAME'] ;
+        return view('home' ,['domain'=> $domain]);
     }
 
     public function getURLShortener()
@@ -89,7 +90,7 @@ class HomeController extends Controller
             $shortlink = $shortlink . $alphabet[(int)($id % $length)];
             $id = (int)($id / $length);
         }
-        while (strlen($shortlink) < 7) {
+        while (strlen($shortlink) < 6) {
             $shortlink = $addition[rand(0, strlen($addition) - 1)] . $shortlink;
         }
         return $shortlink;
@@ -104,12 +105,12 @@ class HomeController extends Controller
     public function shortURL(Request $req)
     {
         $isError = true;
-//        return response()->json(['data' =>  $data ,'isError' =>  $isError]);
+
         $old_id = DB::table('url')->max('id');
-        // print_r($old_id);die;
         $short_url = HomeController::encode($old_id + 1);
 
-
+        $domain = $_SERVER['SERVER_NAME'] ;
+       
         $url = new Url();
 
         if (!HomeController::validateLink($req->org_url)) {
@@ -117,12 +118,12 @@ class HomeController extends Controller
             return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
         }
 
-        if (empty($req->custom_url)) {
+        if (strlen($req->custom_url) == 0) {
             $row = Url::where('url_original', $req->org_url)->where('short_type', 0)->get();
             if (count($row) > 0) {
                  $row_data = Url::where('url_original', $req->org_url)->get();
                 $isError = false;
-                return response()->json(['data' =>  $row_data ,'isError' =>  $isError]);
+                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $domain]);
             } else {
                 $url->url_original = $req->org_url;
                 $url->url_shorten = $short_url;
@@ -147,7 +148,7 @@ class HomeController extends Controller
         $current_id = DB::table('url')->max('id');
         $data = Url::where('id', $current_id)->get();
         $isError = false;
-        return response()->json(['data' =>  $data ,'isError' =>  $isError]);
+        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $domain]);
     }
 
 
