@@ -109,7 +109,6 @@ class HomeController extends Controller
         // print_r($old_id);die;
         $short_url = HomeController::encode($old_id + 1);
 
-
         $url = new Url();
 
         if (!HomeController::validateLink($req->org_url)) {
@@ -188,7 +187,9 @@ class HomeController extends Controller
         }
         $object->save();
     }
-
+    public function pageNotFound(){
+        return  view('error.404');
+    }
     public function test()
     {
         $url = Url::where('id', 1)->first();

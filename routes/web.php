@@ -9,3 +9,4 @@ Route::get('/demo', 'HomeController@test');
 Route::post('/home/ajax/url', 'HomeController@updateUrlInfo');
 Route::post('short', 'HomeController@shortURL');
 
+Route::get('pagenotfound','HomeController@pageNotFound');
