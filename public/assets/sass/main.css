@@ -7852,7 +7852,7 @@ hr.shadowDown {
     color: white;
 }
 .intro .customize input{
-    min-width: 475px;
+    min-width: 440px;
     font-size: 15px;
     background-color: #6d5858;
     border: 1px solid #8383a7;
@@ -7887,6 +7887,7 @@ hr.shadowDown {
     color: white;
     font-size: 16px;
     display: block;
+    width: max-content;
 }
 #custom_url::placeholder{
     color: rgba(24, 255, 221, 0.96);
@@ -7906,7 +7907,10 @@ hr.shadowDown {
     font-size: 20px;
     padding: 5px 30px 5px 30px;
     border-radius: 5px;
-    margin-left: 20px;
+}
+
+.shortURL a:hover{
+    cursor: pointer;
 }
 .graph-chart img{
     margin-top: 50px;

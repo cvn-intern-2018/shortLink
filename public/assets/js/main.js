@@ -22,6 +22,9 @@
                     editHtmlSuccess(result.data, result.domain);
                 }
             },
+            error:function(data){
+                editHtmlFailure('Error');
+            }
         });
     });
     function editHtmlSuccess(data, domain) {
@@ -30,11 +33,11 @@
         for (i = 0; i < data.length ; i++) {
             htmlResultShortten += `
                             <div class="row item">
-                                <div class="col-md-8">
-                                    <a target="_blank" onclick="updateUrlInfo(` + `'`+data[i].id + `'` +`)" href="` + data[i].url_original + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
+                                <div class="col-md-8" style="min-width: 300px">
+                                    <a target="_blank" onclick="updateUrlInfo(` + `'`+data[i].id + `'` +`)" href="` + data[i].url_shorten + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
                                </div>
                                 <div class="col-md-2">
-                                     <a id="btnCopy" data-copy-string="`+ domain + `/` + data[i].url_shorten +`">
+                                     <a id="btnCopy" onclick="return copyTextToClipboard('`+ domain + `/` + data[i].url_shorten +`')">
                                      <i class="fas fa-copy" style="background-color: #688490"></i>
                                     </a>
 
@@ -65,7 +68,32 @@
         var  htmlResult = `<p style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;` + data + `</p>`;
         document.getElementById("short-notify").innerHTML = htmlResult;
         document.getElementById("result-short").innerHTML = '';
-    }
-    
-
+    }   
 })(jQuery);
+function fallbackCopyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+    } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+    }
+    document.body.removeChild(textArea);
+}
+
+function copyTextToClipboard(text) {
+    if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+    }
+    navigator.clipboard.writeText(text).then(function() {
+        console.log('Async: Copying to clipboard was successful!');
+    }, function(err) {
+        console.error('Async: Could not copy text: ', err);
+    });
+}

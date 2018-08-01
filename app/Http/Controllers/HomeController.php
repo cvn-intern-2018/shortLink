@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use App\Url;
 use Illuminate\Support\Facades\View;
+use function MongoDB\BSON\toJSON;
 
 define('CHROME', 1);
 define('FIREFOX', 2);
@@ -19,22 +20,19 @@ define('OTHERS', 0);
 define('BROWSER','browser');
 define('CREATED_AT','created_at');
 
+define('GENERATE', 0);
+define('CUSTOMIZE', 1);
+
 
 class HomeController extends Controller
 {
 
     public function index()
     {
-        $domain = $_SERVER['SERVER_NAME'] ;
+        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
         return view('home' ,['domain'=> $domain]);
     }
 
-    public function getURLShortener()
-    {
-        $url = 'https://github.com/cotdp/php-rc4/blob/master/rc4.php';
-        $original_url = Url::where('url_shorten', $url)->get();
-        var_dump($original_url);
-    }
 
     /**
      * Validate url
@@ -84,7 +82,7 @@ class HomeController extends Controller
         $old_id = DB::table('url')->max('id');
         $short_url = HomeController::encode($old_id + 1);
 
-        $domain = $_SERVER['SERVER_NAME'] ;
+        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
        
         $url = new Url();
 
@@ -94,30 +92,29 @@ class HomeController extends Controller
         }
 
         if (strlen($req->custom_url) == 0) {
-            $row = Url::where('url_original', $req->org_url)->where('short_type', 0)->get();
-            if (count($row) > 0) {
-                 $row_data = Url::where('url_original', $req->org_url)->get();
+            $row = Url::where('url_original', $req->org_url)->where('short_type', GENERATE)->get();
+            if (count($row) > 0) 
+            {
+                $row_data = Url::where('url_original', $req->org_url)->get();
                 $isError = false;
                 return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $domain]);
-            } else {
-                $url->url_original = $req->org_url;
-                $url->url_shorten = $short_url;
-                $url->short_type = 0;
+            } 
+            else {
+                $url->saveData($req->org_url, $short_url, GENERATE);
             }
-        } else {
+        } 
+        else {
             $row_custom = Url::where('url_shorten', $req->custom_url)->get();
             if (count($row_custom) > 0) {
                 $notify_error = "This link already existed. Please choose another short link";
 
                 $isError = true;
                 return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
-            } else {
-                $url->url_original = $req->org_url;
-                $url->url_shorten = $req->custom_url;
-                $url->short_type = 1;
+            } 
+            else {
+                $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
             }
         }
-        $url->save();
         $current_id = DB::table('url')->max('id');
         $data = Url::where('id', $current_id)->get();
         $isError = false;
@@ -147,32 +144,52 @@ class HomeController extends Controller
      * * @param Request $request
      */
 
-    public function updateUrlInfo(Request $request){
 
-        $id = $request->id;
-        $access = new Access();
+    public function updateUrlInfo($id){
         $browser = $this->getBrowser();
-        $access = Access::where('id',22)
-            ->where('browser', 211)
-            ->first();
+        $access = Access::where('id', $id)->where('browser', $browser)->first();
         $time = date('YmdHis');
-        if (isset($access)) {
-
-            $access->id = $id;
-            $access->browser = $browser;
-            $access->clicked_time = $browser.$time;
+        if (is_null($access)) {
+            $access = new Access();
+            $access->saveData($id, $browser, $time);
+        } 
+        else {
+            $access->clicked_time =  $access->clicked_time.' '.$time;
             $access->save();
-        } else {
-            $access->clicked_time =  $access->clicked_time.' '.$browser.$time;
-            $access->save();
-        }
-        //$access->save();
-        return response()->json(['data' =>  $access]);
+        };
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function pageNotFound(){
-        return  view('error.404');
+        return view('error.404');
     }
+
+    /**
+     * @param $url
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function redirectUrl($url)
+    {
+         //Redirect Statistics
+        if (substr($url, -1) === '+')
+        {
+            $url = rtrim($url, "+");   
+            return redirect('/chart');
+        }
+        $url_original = Url::where('url_shorten', $url)->value('url_original');
+       
+        if(count($url_original) > 0) {
+            $id =  Url::where('url_shorten', $url)->value('id');
+            $this->updateUrlInfo($id);
+            return  redirect($url_original);
+        }
+        else
+            return redirect('/pagenotfound');
+    }
+
+
     public function test()
     {
         $url = Url::where('id', 1)->first();
