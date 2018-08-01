@@ -23,6 +23,9 @@ define('CREATED_AT','created_at');
 define('GENERATE', 0);
 define('CUSTOMIZE', 1);
 
+define('ERROR_EXIST',"This link already existed. Please choose another short link");
+define('INVALID_URL',"Invalid URL");
+
 
 class HomeController extends Controller
 {
@@ -79,16 +82,15 @@ class HomeController extends Controller
     {
         $isError = true;
 
-        $old_id = DB::table('url')->max('id');
-        $short_url = HomeController::encode($old_id + 1);
+        $url = new Url();
+        $old_id = $url->getMaxId();
+        $short_url = $this->encode($old_id + 1);
 
         $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
        
-        $url = new Url();
-
-        if (!HomeController::validateLink($req->org_url)) {
-            $notify_error = "Invalid URL";
-            return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
+        
+        if (!$this->validateLink($req->org_url)) {
+            return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
         }
 
         if (strlen($req->custom_url) == 0) {
@@ -106,16 +108,14 @@ class HomeController extends Controller
         else {
             $row_custom = Url::where('url_shorten', $req->custom_url)->get();
             if (count($row_custom) > 0) {
-                $notify_error = "This link already existed. Please choose another short link";
-
                 $isError = true;
-                return response()->json(['data' =>  $notify_error ,'isError' =>  $isError]);
+                return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
             } 
             else {
                 $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
             }
         }
-        $current_id = DB::table('url')->max('id');
+        $current_id =  $url->getMaxId();
         $data = Url::where('id', $current_id)->get();
         $isError = false;
         return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $domain]);
@@ -143,8 +143,6 @@ class HomeController extends Controller
      * Update Url_info when click shorten link
      * * @param Request $request
      */
-
-
     public function updateUrlInfo($id){
         $browser = $this->getBrowser();
         $access = Access::where('id', $id)->where('browser', $browser)->first();
@@ -159,16 +157,18 @@ class HomeController extends Controller
         };
     }
 
+
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return View
      */
     public function pageNotFound(){
         return view('error.404');
     }
 
+
     /**
      * @param $url
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Redirector
      */
     public function redirectUrl($url)
     {

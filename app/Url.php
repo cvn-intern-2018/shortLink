@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Url extends Model
 {
@@ -22,5 +23,9 @@ class Url extends Model
         $this->url_shorten = $url_shorten;
         $this->short_type = $short_type;
         $this->save();
+    }
+
+    function getMaxId() {
+        return DB::table('url')->max('id');
     }
 }
