@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Access;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
@@ -159,15 +160,12 @@ class HomeController extends Controller
         }*/
 
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
-
-        var_dump($user_agent);
         if (strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR/')) return OPERA;
         elseif (strpos($user_agent, 'Edge')) return EDGE;
         elseif (strpos($user_agent, 'Chrome')) return CHROME;
         elseif (strpos($user_agent, 'Safari')) return  SAFARI;
         elseif (strpos($user_agent, 'Firefox')) return FIREFOX;
         elseif (strpos($user_agent, 'MSIE') || strpos($user_agent, 'Trident/7')) return EXPLORER;
-
         return OTHERS;
     }
 
@@ -179,20 +177,25 @@ class HomeController extends Controller
 
     public function updateUrlInfo(Request $request){
 
-        $url_shorten = $request->url_shorten;
-        $object = Url::where('url_shorten', $url_shorten)->first();
+        $id = $request->id;
+        $access = new Access();
         $browser = $this->getBrowser();
-        $time = date('Y-m-d H:i:s');
-        $info = array(
-            BROWSER => $browser,
-            CREATED_AT => $time
-        );
-        if ($object->url_info == null) {
-            $object->url_info = json_encode($info);
+        $access = Access::where('id',22)
+            ->where('browser', 211)
+            ->first();
+        $time = date('YmdHis');
+        if (isset($access)) {
+
+            $access->id = $id;
+            $access->browser = $browser;
+            $access->clicked_time = $browser.$time;
+            $access->save();
         } else {
-            $object->url_info = $object->url_info . ',' . json_encode($info);
+            $access->clicked_time =  $access->clicked_time.' '.$browser.$time;
+            $access->save();
         }
-        $object->save();
+        //$access->save();
+        return response()->json(['data' =>  $access]);
     }
 
     public function pageNotFound(){

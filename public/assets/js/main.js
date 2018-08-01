@@ -31,7 +31,7 @@
             htmlResultShortten += `
                             <div class="row item">
                                 <div class="col-md-8">
-                                    <a target="_blank" href="` + data[i].url_original + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
+                                    <a target="_blank" onclick="updateUrlInfo(` + `'`+data[i].id + `'` +`)" href="` + data[i].url_original + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
                                </div>
                                 <div class="col-md-2">
                                      <a id="btnCopy" data-copy-string="`+ domain + `/` + data[i].url_shorten +`">
