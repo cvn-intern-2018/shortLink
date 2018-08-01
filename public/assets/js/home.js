@@ -14,7 +14,7 @@ function updateUrlInfo($id) {
             id: $id,
         },
         success: function (data) {
-            console.log(data.data);
+            //console.log(data.data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //console.log(textStatus);
