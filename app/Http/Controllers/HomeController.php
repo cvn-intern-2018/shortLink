@@ -179,24 +179,22 @@ class HomeController extends Controller
     public function updateUrlInfo(Request $request){
 
         $id = $request->id;
-        $access = new Access();
         $browser = $this->getBrowser();
-        $access = Access::where('id',22)
-            ->where('browser', 211)
+        $access = Access::where('id',$id)
+            ->where('browser', $browser)
             ->first();
         $time = date('YmdHis');
-        if (isset($access)) {
-
+        if (is_null($access)) {
+            $access = new Access();
             $access->id = $id;
             $access->browser = $browser;
-            $access->clicked_time = $browser.$time;
+            $access->clicked_time = $time;
             $access->save();
         } else {
-            $access->clicked_time =  $access->clicked_time.' '.$browser.$time;
+            $access->clicked_time =  $access->clicked_time.' '.$time;
             $access->save();
-        }
-        //$access->save();
-        return response()->json(['data' =>  $access]);
+        };
+        //return response()->json(['data' =>  $access]);
     }
 
     public function pageNotFound(){
