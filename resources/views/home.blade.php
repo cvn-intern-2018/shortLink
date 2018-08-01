@@ -100,5 +100,14 @@
         $("#btnCopy").click(function() {
             copyTextToClipboard($(this).data('copy-string'));
         });
+
+        $("#custom_url").keyup(function() {
+            if (this.value.match(/[^\w-]/)) {
+                this.value = this.value.replace(/[^\w]+/g, "");
+            }
+            if (this.value.match(/^-/)) {
+            this.value = this.value.replace(/^-+/, "");
+            }
+        });
     </script>
 @endsection
