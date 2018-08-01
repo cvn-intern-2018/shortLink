@@ -1,11 +1,3 @@
-/*=====================================================================
-/  Theme Name: Eden Builder
-/  Author: Script Eden
-/  Author URI: http://www.scripteden.com
-/  Description: Eden Builder
-/  Version: 2.0
-/*=====================================================================*/
-
 (function($){
     jQuery('#btn-shorten').click(function(e){
         e.preventDefault();
