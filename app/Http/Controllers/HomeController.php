@@ -197,22 +197,28 @@ class HomeController extends Controller
         //return response()->json(['data' =>  $access]);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function pageNotFound(){
         return  view('error.404');
     }
+
+    /**
+     * @param $url
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function redirectUrl($url)
     {
-        $url_original = Url::where('url_shorten', $url)->value('url_original');
-        if (substr("$url_original", -1) === '+')
+        if (substr("$url", -1) === '+')
         {
-            var_dump(rtrim($url_original,"+"));
-            exit();
+            $url = rtrim($url,"+");
+            //Redirect Statistics
+            return redirect('/chart');
         }
-        if (count($url_original) > 0) {
-            return redirect($url_original);
-        } else {
-            return redirect('/pagenotfound');
-        }
+        $url_original = Url::where('url_shorten', $url)->value('url_original');
+
+        return count($url_original) > 0 ? redirect($url_original) : redirect('/pagenotfound');
     }
     public function test()
     {
