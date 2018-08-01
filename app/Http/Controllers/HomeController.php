@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use App\Url;
 use Illuminate\Support\Facades\View;
+use function MongoDB\BSON\toJSON;
 
 define('CHROME', 1);
 define('FIREFOX', 2);
@@ -25,7 +26,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        $domain = $_SERVER['SERVER_NAME'] ;
+        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
         return view('home' ,['domain'=> $domain]);
     }
 
@@ -94,7 +95,7 @@ class HomeController extends Controller
         $old_id = DB::table('url')->max('id');
         $short_url = HomeController::encode($old_id + 1);
 
-        $domain = $_SERVER['SERVER_NAME'] ;
+        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
        
         $url = new Url();
 
@@ -200,6 +201,20 @@ class HomeController extends Controller
 
     public function pageNotFound(){
         return  view('error.404');
+    }
+    public function redirectUrl($url)
+    {
+        $url_original = Url::where('url_shorten', $url)->value('url_original');
+        if (substr("$url_original", -1) === '+')
+        {
+            var_dump(rtrim($url_original,"+"));
+            exit();
+        }
+        if (count($url_original) > 0) {
+            return redirect($url_original);
+        } else {
+            return redirect('/pagenotfound');
+        }
     }
     public function test()
     {
