@@ -140,27 +140,8 @@ class HomeController extends Controller
      * */
     public function getBrowser()
     {
-       /* $browser = get_browser()->browser;
-        switch ($browser) {
-            case 'Chrome':
-                return CHROME;
-            case 'Firefox':
-                return FIREFOX;
-            case 'Safari':
-                return SAFARI;
-            case 'Opera':
-                return OPERA;
-            case 'Edge':
-                return EDGE;
-            case 'IE':
-                return EXPLORER;
-            default:
-                return OTHERS;
-        }*/
-
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
-        var_dump($user_agent);
         if (strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR/')) return OPERA;
         elseif (strpos($user_agent, 'Edge')) return EDGE;
         elseif (strpos($user_agent, 'Chrome')) return CHROME;
