@@ -23,7 +23,7 @@
                 }
             },
             error:function(data){
-                editHtmlFailure('Error');
+                editHtmlFailure('The request timed out error');
             }
         });
     });

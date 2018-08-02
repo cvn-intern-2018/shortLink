@@ -8,7 +8,7 @@
             <nav role="navigation" class="navbar navbar-default">
                 <div class="container">
                     <div class="navbar-header">
-                        <a href="#" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40" width="50"><span>Cybozu</span><span>Company</span></a>
+                        <a href="/" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40" width="50"><span>Cybozu</span><span>Company</span></a>
                     </div>
                 </div>
             </nav>
