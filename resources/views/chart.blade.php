@@ -42,7 +42,7 @@
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <h5>URL Shortener: </h5>
-                                                    <a target="_blank" class="original-url" id="shorten_link_chart">
+                                                    <a target="_blank" class="original-url" id="shorten_link_chart" href="{{$url_short_link}}">
                                                         http://cus.dev.cybozu.xyz/{{$url_short_link}}
                                                     </a>
                                                 </div>
