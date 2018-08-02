@@ -18,7 +18,7 @@ class Url extends Migration
             $table->text('url_original', 2048);
             $table->string('url_shorten', 20);
             $table->tinyInteger('short_type');
-            $table->timestamp('created_at');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->unique('url_shorten');
 
         });
