@@ -185,8 +185,6 @@ class HomeController extends Controller
         $url_original = Url::where('url_shorten', $url)->value('url_original');
 
         if(!is_null($url_original) ) {
-            var_dump(111);
-
             $id =  Url::where('url_shorten', $url)->value('id');
             $this->updateUrlInfo($id);
             return  redirect($url_original);
