@@ -30,10 +30,19 @@ define('INVALID_URL',"Invalid URL");
 class HomeController extends Controller
 {
 
+    /**
+     * @return string domain
+     */
+    public function getDomain() {
+        if(strlen($_SERVER['SERVER_PORT']) > 0) 
+            return $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
+        return $_SERVER['SERVER_NAME'];
+    }
+
+
     public function index()
     {
-        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
-        return view('home' ,['domain'=> $domain]);
+        return view('home' ,['domain'=> $this->getDomain()]);
     }
 
 
@@ -73,6 +82,7 @@ class HomeController extends Controller
 
     }
 
+
     /**
      * Short URL
      * @param Request $req
@@ -85,41 +95,34 @@ class HomeController extends Controller
         $url = new Url();
         $old_id = $url->getMaxId();
         $short_url = $this->encode($old_id + 1);
-
-        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
        
         
-        if (!$this->validateLink($req->org_url)) {
+        if (!$this->validateLink($req->org_url)) 
             return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
-        }
 
         if (strlen($req->custom_url) == 0) {
             $row = Url::where('url_original', $req->org_url)->where('short_type', GENERATE)->get();
             if (count($row) > 0) 
             {
-                $row_data = Url::where('url_original', $req->org_url)->get();
-                // $row_data = $url->getRows('url_original', $req->org_url);
+                $row_data = $url->getDataRows('url_original', $req->org_url);
                 $isError = false;
-                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $domain]);
+                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
             } 
-            else {
+            else 
                 $url->saveData($req->org_url, $short_url, GENERATE);
-            }
         } 
-        else {
-            $row_custom = Url::where('url_shorten', $req->custom_url)->get();
-            if (count($row_custom) > 0) {
-                $isError = true;
+        else 
+        {
+            $row_custom = $url->getDataRows('url_shorten', $req->custom_url);
+            if (count($row_custom) > 0) 
                 return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
-            } 
-            else {
+            else
                 $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
-            }
         }
         $current_id =  $url->getMaxId();
-        $data = Url::where('id', $current_id)->get();
+        $data = $url->getDataRows('id', $current_id);
         $isError = false;
-        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $domain]);
+        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
     }
 
 
@@ -171,23 +174,22 @@ class HomeController extends Controller
      * @param $url
      * @return Redirector
      */
-    public function redirectUrl($url)
+    public function redirectUrl($url_shorten)
     {
+        $url = new Url();
          //Redirect Statistics
-        if (substr($url, -1) === '+')
+        if (substr($url_shorten, -1) === '+')
         {
-            $url = rtrim($url, "+");
+            $url_shorten = rtrim($url_shorten, "+");
             return redirect()->action('ChartController@index', [
-                'url_shorten' => $url
+                'url_shorten' => $url_shorten
             ]);
         }
 
-        $url_original = Url::where('url_shorten', $url)->value('url_original');
+        $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
 
-        if(!is_null($url_original) ) {
-            var_dump(111);
-
-            $id =  Url::where('url_shorten', $url)->value('id');
+        if(!is_null($url_original)) {
+            $id = $url->getAttributeRowData('url_shorten', $url_shorten, 'id');
             $this->updateUrlInfo($id);
             return  redirect($url_original);
         }
