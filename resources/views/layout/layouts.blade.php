@@ -33,7 +33,7 @@
 <script src="assets/js/portfolio-custom1.js"></script>
 <script src="assets/js/portfolio-custom2.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/home.js"></script>
+<script src="assets/js/chart.js"></script>
 
 @yield('script')
 
