@@ -176,12 +176,17 @@ class HomeController extends Controller
          //Redirect Statistics
         if (substr($url, -1) === '+')
         {
-            $url = rtrim($url, "+");   
-            return redirect('/chart');
+            $url = rtrim($url, "+");
+            return redirect()->action('ChartController@index', [
+                'url_shorten' => $url
+            ]);
         }
+
         $url_original = Url::where('url_shorten', $url)->value('url_original');
-       
-        if(count($url_original) > 0) {
+
+        if(!is_null($url_original) ) {
+            var_dump(111);
+
             $id =  Url::where('url_shorten', $url)->value('id');
             $this->updateUrlInfo($id);
             return  redirect($url_original);
