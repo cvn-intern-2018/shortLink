@@ -98,6 +98,7 @@ class HomeController extends Controller
             if (count($row) > 0) 
             {
                 $row_data = Url::where('url_original', $req->org_url)->get();
+                // $row_data = $url->getRows('url_original', $req->org_url);
                 $isError = false;
                 return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $domain]);
             } 

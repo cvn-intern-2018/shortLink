@@ -28,4 +28,8 @@ class Url extends Model
     function getMaxId() {
         return DB::table('url')->max('id');
     }
+
+    function getRows($string1, $key1, $string2 = null, $key2 = null) {
+        return  $this->where($string1, $key1)->where($string2, $key2)->get();
+    }
 }
