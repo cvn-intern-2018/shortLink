@@ -34,7 +34,7 @@
             htmlResultShortten += `
                             <div class="row item">
                                 <div class="col-md-8" style="min-width: 300px">
-                                    <a target="_blank" onclick="updateUrlInfo(` + `'`+data[i].id + `'` +`)" href="` + data[i].url_shorten + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
+                                    <a target="_blank" href="` + data[i].url_shorten + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
                                </div>
                                 <div class="col-md-2">
                                      <a id="btnCopy" onclick="return copyTextToClipboard('`+ domain + `/` + data[i].url_shorten +`')">
@@ -43,7 +43,7 @@
 
                                 </div>
                                 <div class="col-md-2">
-                                     <a href="#"><i class="fas fa-chart-bar"></i></i></a>
+                                     <a  href="` + data[i].url_shorten + `+"><i class="fas fa-chart-bar"></i></i></a>
                                  </div>
                             </div>
                                `
