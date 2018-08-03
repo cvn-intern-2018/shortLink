@@ -15,4 +15,11 @@ class Access extends Model
         $this->clicked_time = $click_time;
         $this->save();
     }
+    function scopeGetById($query, $id)
+    {
+        return $query->where('id',$id);
+    }
+    function scopeGetByBrowser($query, $browser){
+        return $query->where('browser',$browser);
+    }
 }

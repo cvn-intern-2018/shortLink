@@ -32,4 +32,10 @@ class Url extends Model
     function getRows($string1, $key1, $string2 = null, $key2 = null) {
         return  $this->where($string1, $key1)->where($string2, $key2)->get();
     }
+
+    function scopeGetByUrlShorten($query, $url_shorten){
+        return $query->where('url_shorten',$url_shorten);
+    }
+
+
 }
