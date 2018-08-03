@@ -36,4 +36,12 @@ class Url extends Model
     function getAttributeRowData($string, $key, $value) {
         return $this->where($string, $key)->value($value);
     }
+
+    public function isExistInDatabase($string, $key) {
+        return count($this->where($string, $key)->get()) > 0 ? true : false;
+    }
+
+    public function isExistInDatabaseWith2Argument($string, $key, $string1, $key1) {
+        return count($this->where($string, $key)->where($string1, $key1)->get()) > 0 ? true : false;
+    }
 }

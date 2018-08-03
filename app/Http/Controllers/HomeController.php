@@ -91,30 +91,28 @@ class HomeController extends Controller
     public function shortURL(Request $req)
     {
         $isError = true;
-
         $url = new Url();
-        $old_id = $url->getMaxId();
-        $short_url = $this->encode($old_id + 1);
-       
+        $old_id = $url->getMaxId();  
         
         if (!$this->validateLink($req->org_url)) 
             return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
 
         if (strlen($req->custom_url) == 0) {
-            $row = Url::where('url_original', $req->org_url)->where('short_type', GENERATE)->get();
-            if (count($row) > 0) 
+            if($url->isExistInDatabaseWith2Argument('url_original', $req->org_url, 'short_type', GENERATE))
             {
                 $row_data = $url->getDataRows('url_original', $req->org_url);
                 $isError = false;
                 return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
             } 
-            else 
+            else {
+                $short_url = $this->encode($old_id + 1);
+                while($url->isExistInDatabase('url_shorten', $short_url))
+                    $short_url = $this->encode($old_id + 1);
                 $url->saveData($req->org_url, $short_url, GENERATE);
+            }
         } 
-        else 
-        {
-            $row_custom = $url->getDataRows('url_shorten', $req->custom_url);
-            if (count($row_custom) > 0) 
+        else { 
+            if($url->isExistInDatabase('url_shorten', $req->custom_url))
                 return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
             else
                 $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
@@ -185,7 +183,6 @@ class HomeController extends Controller
                 'url_shorten' => $url_shorten
             ]);
         }
-
         $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
 
         if(!is_null($url_original)) {
