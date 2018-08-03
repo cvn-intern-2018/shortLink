@@ -1839,6 +1839,7 @@
     background-color: rgba(1, 191, 134, 0.75);
     padding-bottom: 50px;
     padding-top: 50px;
+    display: block;
 }
 
 .header8 .email{

@@ -64,9 +64,6 @@
         </footer>
     </div><!-- /#page -->
 @endsection
-
-
-
 @section('script')
     <script type="text/javascript">
         $("#custom_url").keyup(function() {

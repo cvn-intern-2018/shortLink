@@ -34,8 +34,8 @@ class HomeController extends Controller
      * @return string domain
      */
     public function getDomain() {
-        if(strlen($_SERVER['SERVER_PORT']) > 0) 
-            return $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
+        if(strlen($_SERVER['SERVER_PORT']) > 0)
+            return config('constants.domain') ;
         return $_SERVER['SERVER_NAME'];
     }
 
@@ -176,14 +176,16 @@ class HomeController extends Controller
      */
     public function redirectUrl($url_shorten)
     {
+        var_dump($url_shorten);
         $url = new Url();
          //Redirect Statistics
         if (substr($url_shorten, -1) === '+')
         {
             $url_shorten = rtrim($url_shorten, "+");
-            return redirect()->action('ChartController@index', [
-                'url_shorten' => $url_shorten
-            ]);
+            return $url_shorten ?
+                redirect()->action('ChartController@index', ['url_shorten' => $url_shorten]):redirect('/pagenotfound');
+
+//            return redirect('/pagenotfound');
         }
         $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
 

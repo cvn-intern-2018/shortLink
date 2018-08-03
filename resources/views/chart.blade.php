@@ -42,7 +42,7 @@
                                                 <div class="col-md-10">
                                                     <h5>URL Shortener: </h5>
                                                     <a target="_blank" class="original-url" id="shorten_link_chart" href="{{$url_short_link}}">
-                                                        http://cus.dev.cybozu.xyz/{{$url_short_link}}
+                                                        {{config('constants.domain')}}/{{$url_short_link}}
                                                     </a>
                                                 </div>
                                                 <div class="col-md-2">
@@ -56,7 +56,7 @@
                                         <div class="info-url form-group">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5>Time Created: </h5>
+                                                    <h5>Time Created <p>(dd-mm-yyyy)</p>: </h5>
                                                     <p>{{$created_at}}</p>
                                                 </div>
                                             </div>
@@ -77,25 +77,25 @@
                             </div>
                             <div class="row graph-chart">
                                 <div class="row">
-
-                                </div>
-                                <div class="pull-left">
-                                    <h2>Title</h2>
-                                </div>
-                                <div class="pull-right cbb-time">
-                                    37 clicks
-                                    <i class="fa fa-bar-chart" aria-hidden="true"> </i>
-                                    <select>
-                                        <option selected>Timeframe: (All time)</option>
-                                        <option>2 hours</option>
-                                        <option>Day</option>
-                                        <option>Week</option>
-                                        <option>Month</option>
-                                        <option>All time</option>
-                                    </select>
-                                </div>
-                                <div class="row">
-                                    <img src="assets/images/chart-2.png" alt="">
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                    Dashboard
+                                                    37 clicks
+                                                    <i class="fa fa-bar-chart" aria-hidden="true"> </i>
+                                                    <select id="time-frame">
+                                                        <option value= {{config('constants.timeframe.2hours')}}>2 hours</option>
+                                                        <option value= {{config('constants.timeframe.day')}}>Day</option>
+                                                        <option value= {{config('constants.timeframe.week')}}>Week</option>
+                                                        <option value= {{config('constants.timeframe.month')}}>Month</option>
+                                                        <option selected value= {{config('constants.timeframe.alltime')}}>All time</option>
+                                                    </select>
+                                            </div>
+                                            <div class="panel-body">
+                                                <canvas id="myChart" width="400" height="400"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -117,3 +117,46 @@
         </footer>
     </div><!-- /#page -->
 @endsection
+@section('script')
+    <script src="{{asset('assets/js/chart.js')}}"></script>
+    <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+@endsection
+

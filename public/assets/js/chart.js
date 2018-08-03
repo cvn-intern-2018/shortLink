@@ -1,3 +1,12 @@
+
+(function($){
+    jQuery('#time-frame').change(function () {
+        var time_select = $( this ).val();
+
+        
+    })
+
+})(jQuery);
 function copyToClipboard(element) {
     var $temp = $("<input>");
     $("body").append($temp);
