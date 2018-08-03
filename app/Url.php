@@ -29,8 +29,20 @@ class Url extends Model
         return DB::table('url')->max('id');
     }
 
-    function getRows($string1, $key1, $string2 = null, $key2 = null) {
-        return  $this->where($string1, $key1)->where($string2, $key2)->get();
+    function getDataRows($string1, $key1) {
+        return $this->where($string1, $key1)->get();
+    }
+
+    function getAttributeRowData($string, $key, $value) {
+        return $this->where($string, $key)->value($value);
+    }
+
+    public function isExistInDatabase($string, $key) {
+        return count($this->where($string, $key)->get()) > 0 ? true : false;
+    }
+
+    public function isExistInDatabaseWith2Argument($string, $key, $string1, $key1) {
+        return count($this->where($string, $key)->where($string1, $key1)->get()) > 0 ? true : false;
     }
 
     function scopeGetByUrlShorten($query, $url_shorten){

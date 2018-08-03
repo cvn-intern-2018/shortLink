@@ -10,13 +10,7 @@ use App\Url;
 use Illuminate\Support\Facades\View;
 use function MongoDB\BSON\toJSON;
 
-define('CHROME', 1);
-define('FIREFOX', 2);
-define('SAFARI', 3);
-define('OPERA', 4);
-define('EDGE', 5);
-define('EXPLORER', 6);
-define('OTHERS', 0);
+
 define('BROWSER','browser');
 define('CREATED_AT','created_at');
 
@@ -30,10 +24,19 @@ define('INVALID_URL',"Invalid URL");
 class HomeController extends Controller
 {
 
+    /**
+     * @return string domain
+     */
+    public function getDomain() {
+        if(strlen($_SERVER['SERVER_PORT']) > 0)
+            return config('constants.domain') ;
+        return $_SERVER['SERVER_NAME'];
+    }
+
+
     public function index()
     {
-        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
-        return view('home' ,['domain'=> $domain]);
+        return view('home' ,['domain'=> $this->getDomain()]);
     }
 
 
@@ -73,6 +76,7 @@ class HomeController extends Controller
 
     }
 
+
     /**
      * Short URL
      * @param Request $req
@@ -81,45 +85,36 @@ class HomeController extends Controller
     public function shortURL(Request $req)
     {
         $isError = true;
-
         $url = new Url();
-        $old_id = $url->getMaxId();
-        $short_url = $this->encode($old_id + 1);
-
-        $domain = $_SERVER['SERVER_NAME'] .':' .$_SERVER['SERVER_PORT'] ;
-       
+        $old_id = $url->getMaxId();  
         
-        if (!$this->validateLink($req->org_url)) {
+        if (!$this->validateLink($req->org_url)) 
             return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
-        }
 
         if (strlen($req->custom_url) == 0) {
-            $row = Url::where('url_original', $req->org_url)->where('short_type', GENERATE)->get();
-            if (count($row) > 0) 
+            if($url->isExistInDatabaseWith2Argument('url_original', $req->org_url, 'short_type', GENERATE))
             {
-                $row_data = Url::where('url_original', $req->org_url)->get();
-                // $row_data = $url->getRows('url_original', $req->org_url);
+                $row_data = $url->getDataRows('url_original', $req->org_url);
                 $isError = false;
-                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $domain]);
+                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
             } 
             else {
+                $short_url = $this->encode($old_id + 1);
+                while($url->isExistInDatabase('url_shorten', $short_url))
+                    $short_url = $this->encode($old_id + 1);
                 $url->saveData($req->org_url, $short_url, GENERATE);
             }
         } 
-        else {
-            $row_custom = Url::where('url_shorten', $req->custom_url)->get();
-            if (count($row_custom) > 0) {
-                $isError = true;
+        else { 
+            if($url->isExistInDatabase('url_shorten', $req->custom_url))
                 return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
-            } 
-            else {
+            else
                 $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
-            }
         }
         $current_id =  $url->getMaxId();
-        $data = Url::where('id', $current_id)->get();
+        $data = $url->getDataRows('id', $current_id);
         $isError = false;
-        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $domain]);
+        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
     }
 
 
@@ -130,12 +125,21 @@ class HomeController extends Controller
     public function getBrowser()
     {
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        if (strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR/')) return OPERA;
-        elseif (strpos($user_agent, 'Edge')) return EDGE;
-        elseif (strpos($user_agent, 'Chrome')) return CHROME;
-        elseif (strpos($user_agent, 'Safari')) return  SAFARI;
-        elseif (strpos($user_agent, 'Firefox')) return FIREFOX;
-        elseif (strpos($user_agent, 'MSIE') || strpos($user_agent, 'Trident/7')) return EXPLORER;
+        $browsers_map = [
+            'Opera' => config('constants.browser.OPERA'),
+            'OPR/' => config('constants.browser.OPERA'),
+            'Edge' => config('constants.browser.EDGE'),
+            'Chrome' => config('constants.browser.CHROME'),
+            'Safari' => config('constants.browser.SAFARI'),
+            'Firefox' => config('constants.browser..FIREFOX'),
+            'MSIE' => config('constants.browser.IE'),
+            'Trident/7' => config('constants.browser.IE'),
+        ];
+
+        foreach ($browsers_map as $user_agent_part => $browser) {
+            if (strpos($user_agent, $user_agent_part)) return $browser;
+        }
+
         return OTHERS;
     }
 
@@ -171,37 +175,27 @@ class HomeController extends Controller
      * @param $url
      * @return Redirector
      */
-    public function redirectUrl($url)
+    public function redirectUrl($url_shorten)
     {
+        var_dump($url_shorten);
+        $url = new Url();
          //Redirect Statistics
-        if (substr($url, -1) === '+')
+        if (substr($url_shorten, -1) === '+')
         {
-            $url = rtrim($url, "+");
-            return redirect()->action('ChartController@index', [
-                'url_shorten' => $url
-            ]);
+            $url_shorten = rtrim($url_shorten, "+");
+            return $url_shorten ?
+                redirect()->action('ChartController@index', ['url_shorten' => $url_shorten]):redirect('/pagenotfound');
+
         }
+        $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
 
-        $url_original = Url::where('url_shorten', $url)->value('url_original');
-
-        if(!is_null($url_original) ) {
-            var_dump(111);
-
-            $id =  Url::where('url_shorten', $url)->value('id');
+        if(!is_null($url_original)) {
+            $id = $url->getAttributeRowData('url_shorten', $url_shorten, 'id');
             $this->updateUrlInfo($id);
             return  redirect($url_original);
         }
-        else
-            return redirect('/pagenotfound');
-    }
 
-
-    public function test()
-    {
-        $url = Url::where('id', 1)->first();
-        $info = json_decode('[' . $url->url_info . ']');
-        var_dump($info);
-
+        return redirect('/pagenotfound');
     }
 
 }

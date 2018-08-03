@@ -23,7 +23,7 @@
                 }
             },
             error:function(data){
-                editHtmlFailure('Error');
+                editHtmlFailure('The request timed out error');
             }
         });
     });
@@ -43,7 +43,7 @@
 
                                 </div>
                                 <div class="col-md-2">
-                                     <a href="#"><i class="fas fa-chart-bar"></i></i></a>
+                                     <a  href="` + data[i].url_shorten + `+"><i class="fas fa-chart-bar"></i></i></a>
                                  </div>
                             </div>
                                `
