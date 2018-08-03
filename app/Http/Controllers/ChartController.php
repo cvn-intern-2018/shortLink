@@ -10,8 +10,9 @@ use App\Url;
 class ChartController extends Controller
 {
     //
-    public function index(Request $request)
+    public function index()
     {
+        var_dump(11);
         $url_shorter = $request->url_shorten;
         //var_dump($url_shorter_plus);
 
