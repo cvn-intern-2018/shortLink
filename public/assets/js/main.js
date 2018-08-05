@@ -22,7 +22,7 @@
                     editHtmlSuccess(result.data, result.domain);
                 }
             },
-            error:function(data){
+            error:function(result){
                 editHtmlFailure('The request timed out error');
             }
         });

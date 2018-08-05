@@ -25,8 +25,8 @@
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <h5>Original Link: </h5>
-                                                    <a target="_blank" class="original-url" href=" {{$url_original_link}}" data-toggle="tooltip" data-placement="top" title="{{$url_original_link}}" id="original_link_chart">
-                                                        {{$url_original_link}}
+                                                    <a target="_blank" class="original-url" href=" {{$obj_info_url_shortener->url_original}}" data-toggle="tooltip" data-placement="top" title="{{$obj_info_url_shortener->url_original}}" id="original_link_chart">
+                                                        {{$obj_info_url_shortener->url_original}}
                                                     </a>
                                                 </div>
                                                 <div class="col-md-2">
@@ -41,8 +41,8 @@
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <h5>URL Shortener: </h5>
-                                                    <a target="_blank" class="original-url" id="shorten_link_chart" href="{{$url_short_link}}">
-                                                        {{config('constants.domain')}}/{{$url_short_link}}
+                                                    <a target="_blank" class="original-url" id="shorten_link_chart" href="{{$obj_info_url_shortener->url_short}}">
+                                                        {{config('constants.domain')}}/{{$obj_info_url_shortener->url_short}}
                                                     </a>
                                                 </div>
                                                 <div class="col-md-2">
@@ -57,7 +57,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5>Time Created <p>(dd-mm-yyyy)</p>: </h5>
-                                                    <p>{{$created_at}}</p>
+                                                    <p>{{$obj_info_url_shortener->created_at}}</p>
                                                 </div>
                                             </div>
 
@@ -67,7 +67,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5>Total Clicks: </h5>
-                                                    <p>{{$countClickedTime}}</p>
+                                                    <p>{{$obj_info_url_shortener->count_clicked_time}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -117,46 +117,10 @@
         </footer>
     </div><!-- /#page -->
 @endsection
-@section('script')
-    <script src="{{asset('assets/js/chart.js')}}"></script>
-    <script>
-        var ctx = document.getElementById("myChart").getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });
+@section('script')    
+    <script>     
+        var arr_data_browser = <?php echo json_encode($arr_data_browser); ?>;           
     </script>
+    <script src="{{asset('assets/js/chart.js')}}"></script>
 @endsection
 
