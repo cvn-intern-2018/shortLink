@@ -1,7 +1,6 @@
 <?php
 
 Route::get('/', 'HomeController@index');
-Route::get('/demo', 'HomeController@getBrowser');
 Route::post('short', 'HomeController@shortURL');
 Route::post('/chart/statistics', 'ChartController@getDataStatistics');
 Route::get('pagenotfound', 'HomeController@pageNotFound');
