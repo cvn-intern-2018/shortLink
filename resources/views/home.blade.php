@@ -8,7 +8,8 @@
             <nav role="navigation" class="navbar navbar-default">
                 <div class="container">
                     <div class="navbar-header">
-                        <a href="/" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40" width="50"><span>Cybozu</span><span>Company</span></a>
+                        <a href="/" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40"
+                                                                    width="50"><span>Cybozu</span><span>Company</span></a>
                     </div>
                 </div>
             </nav>
@@ -24,24 +25,29 @@
                                 <div class="row margin-bottom-0">
                                     <div class="col-md-12 col-sm-12">
                                         <div class="form-group">
-                                            <input type="text" class="form-control input-lg" id="org_url" placeholder="Your URL here" name="org_url" required>
+                                            <input type="text" class="form-control input-lg" id="org_url"
+                                                   placeholder="Your URL here" name="org_url" required>
                                         </div>
                                         <div class="customize form-group">
                                             <h4>Customize short URL (Optional)</h4>
-                                            <p>{{ $domain }}/</p><input maxlength="20" type="text" id="custom_url" name="custom_url" placeholder="7-20 characters( alphabet ,numeric, hyphen ,underscore)">
+                                            <p>{{ $domain }}/</p><input maxlength="20" type="text" id="custom_url"
+                                                                        name="custom_url"
+                                                                        placeholder="7-20 characters( alphabet ,numeric, hyphen ,underscore)">
                                         </div>
                                         <div class="form-group row" id="short-notify">
 
                                         </div>
 
                                         <div class="btn-shorten form-group">
-                                            <button  id="btn-shorten" type="submit" class="btn btn-info button" name="btn-shorten">Shorten</button>
+                                            <button id="btn-shorten" type="submit" class="btn btn-info button"
+                                                    name="btn-shorten">Shorten
+                                            </button>
                                         </div>
                                     </div>
 
                                 </div>
 
-                                <div class="row result-short"  id="result-short">
+                                <div class="row result-short" id="result-short">
 
                                 </div>
 
@@ -66,12 +72,12 @@
 @endsection
 @section('script')
     <script type="text/javascript">
-        $("#custom_url").keyup(function() {
+        $("#custom_url").keyup(function () {
             if (this.value.match(/[^\w-]/)) {
                 this.value = this.value.replace(/[^\w]+/g, "");
             }
             if (this.value.match(/^-/)) {
-            this.value = this.value.replace(/^-+/, "");
+                this.value = this.value.replace(/^-+/, "");
             }
         });
     </script>

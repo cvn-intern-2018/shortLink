@@ -14,12 +14,12 @@ class ChartController extends Controller
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
-    {             
-        $arr_data_browser = $this->createArrTemplateOfBrowser();         
+    {
+        $arr_data_browser = $this->createArrTemplateOfBrowser();
         $url_shorter = $request->url_shorten;
-        $record_url = Url::GetByUrlShorten( $url_shorter)->first();
+        $record_url = Url::GetByUrlShorten($url_shorter)->first();
         if (is_null($record_url))
-            return view('error.404');        
+            return view('error.404');
 
         $clicked_time_total = 0;
         $record_access = Access::GetById($record_url->id)->get();
@@ -41,17 +41,17 @@ class ChartController extends Controller
     /**
      * @return array
      */
-    public function createArrTemplateOfBrowser(){
-        $arr_data_browser = [];   
+    public function createArrTemplateOfBrowser()
+    {
+        $arr_data_browser = [];
         $browser = config('constants.browser');
-        foreach($browser as $key=>$value)
-        {
+        foreach ($browser as $key => $value) {
             $obj_browser = (object)[
-                'browser_name'    => $key,
-                'total_click'     => 0,
-                'arr_click_time'  =>''
-            ]; 
-            array_push($arr_data_browser,$obj_browser);
+                'browser_name' => $key,
+                'total_click' => 0,
+                'arr_click_time' => ''
+            ];
+            array_push($arr_data_browser, $obj_browser);
         }
         return $arr_data_browser;
     }

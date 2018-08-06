@@ -18,29 +18,34 @@ class Url extends Model
         'created_At',
     ];
 
-    function saveData($url_original, $url_shorten, $short_type) {
+    function saveData($url_original, $url_shorten, $short_type)
+    {
         $this->url_original = $url_original;
         $this->url_shorten = $url_shorten;
         $this->short_type = $short_type;
         $this->save();
     }
 
-    function getMaxId() {
+    function getMaxId()
+    {
         return DB::table('url')->max('id');
     }
 
-    function getDataRows($string1, $key1) {
+    function getDataRows($string1, $key1)
+    {
         return $this->where($string1, $key1)->get();
     }
 
-    function getAttributeRowData($string, $key, $value) {
+    function getAttributeRowData($string, $key, $value)
+    {
         return $this->where($string, $key)->value($value);
     }
 
-    public function isExistInDatabase($string, $key, $string1 = "", $key1 = "") {
+    public function isExistInDatabase($string, $key, $string1 = "", $key1 = "")
+    {
         $query = $this->where($string, $key);
 
-        if($string1 && $key1) {
+        if ($string1 && $key1) {
             $query->where($string1, $key1);
         }
 
@@ -55,8 +60,9 @@ class Url extends Model
 //        return count($this->where($string, $key)->where($string1, $key1)->get()) > 0 ? true : false;
 //    }
 
-    function scopeGetByUrlShorten($query, $url_shorten){
-        return $query->where('url_shorten',$url_shorten);
+    function scopeGetByUrlShorten($query, $url_shorten)
+    {
+        return $query->where('url_shorten', $url_shorten);
     }
 
 
