@@ -44,4 +44,10 @@ class Url extends Model
     public function isExistInDatabaseWith2Argument($string, $key, $string1, $key1) {
         return count($this->where($string, $key)->where($string1, $key1)->get()) > 0 ? true : false;
     }
+
+    function scopeGetByUrlShorten($query, $url_shorten){
+        return $query->where('url_shorten',$url_shorten);
+    }
+
+
 }

@@ -10,13 +10,7 @@ use App\Url;
 use Illuminate\Support\Facades\View;
 use function MongoDB\BSON\toJSON;
 
-define('CHROME', 1);
-define('FIREFOX', 2);
-define('SAFARI', 3);
-define('OPERA', 4);
-define('EDGE', 5);
-define('EXPLORER', 6);
-define('OTHERS', 0);
+
 define('BROWSER','browser');
 define('CREATED_AT','created_at');
 
@@ -131,12 +125,21 @@ class HomeController extends Controller
     public function getBrowser()
     {
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        if (strpos($user_agent, 'Opera') || strpos($user_agent, 'OPR/')) return OPERA;
-        elseif (strpos($user_agent, 'Edge')) return EDGE;
-        elseif (strpos($user_agent, 'Chrome')) return CHROME;
-        elseif (strpos($user_agent, 'Safari')) return  SAFARI;
-        elseif (strpos($user_agent, 'Firefox')) return FIREFOX;
-        elseif (strpos($user_agent, 'MSIE') || strpos($user_agent, 'Trident/7')) return EXPLORER;
+        $browsers_map = [
+            'Opera' => config('constants.browser.OPERA'),
+            'OPR/' => config('constants.browser.OPERA'),
+            'Edge' => config('constants.browser.EDGE'),
+            'Chrome' => config('constants.browser.CHROME'),
+            'Safari' => config('constants.browser.SAFARI'),
+            'Firefox' => config('constants.browser..FIREFOX'),
+            'MSIE' => config('constants.browser.IE'),
+            'Trident/7' => config('constants.browser.IE'),
+        ];
+
+        foreach ($browsers_map as $user_agent_part => $browser) {
+            if (strpos($user_agent, $user_agent_part)) return $browser;
+        }
+
         return OTHERS;
     }
 
@@ -148,7 +151,7 @@ class HomeController extends Controller
     public function updateUrlInfo($id){
         $browser = $this->getBrowser();
         $access = Access::where('id', $id)->where('browser', $browser)->first();
-        $time = date('YmdHis');
+        $time = round(microtime(true) * 1000);
         if (is_null($access)) {
             $access = new Access();
             $access->saveData($id, $browser, $time);
