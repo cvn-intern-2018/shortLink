@@ -14,6 +14,7 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         //
     ];
+
     /**
      * Determine if the session and input CSRF tokens match.
      *

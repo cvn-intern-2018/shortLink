@@ -1,5 +1,5 @@
-(function($){
-    jQuery('#btn-shorten').click(function(e){
+(function ($) {
+    jQuery('#btn-shorten').click(function (e) {
         e.preventDefault();
         $.ajaxSetup({
             headers: {
@@ -13,31 +13,31 @@
                 org_url: jQuery('#org_url').val(),
                 custom_url: jQuery('#custom_url').val(),
             },
-            success: function(result) {
-                if(result.isError)
-                {
+            success: function (result) {
+                if (result.isError) {
                     editHtmlFailure(result.data);
                 }
                 else {
                     editHtmlSuccess(result.data, result.domain);
                 }
             },
-            error:function(result){
+            error: function (result) {
                 editHtmlFailure('The request timed out error');
             }
         });
     });
+
     function editHtmlSuccess(data, domain) {
         var htmlResultShortten = '';
 
-        for (i = 0; i < data.length ; i++) {
+        for (i = 0; i < data.length; i++) {
             htmlResultShortten += `
                             <div class="row item">
                                 <div class="col-md-8" style="min-width: 300px">
-                                    <a target="_blank" href="` + data[i].url_shorten + `" id="short_generate">`+ domain + `/` + data[i].url_shorten + `</a>
+                                    <a target="_blank" href="` + data[i].url_shorten + `" id="short_generate">` + domain + `/` + data[i].url_shorten + `</a>
                                </div>
                                 <div class="col-md-2">
-                                     <a id="btnCopy" onclick="return copyTextToClipboard('`+ domain + `/` + data[i].url_shorten +`')">
+                                     <a id="btnCopy" onclick="return copyTextToClipboard('` + domain + `/` + data[i].url_shorten + `')">
                                      <i class="fas fa-copy" style="background-color: #688490"></i>
                                     </a>
 
@@ -64,12 +64,14 @@
         document.getElementById("result-short").innerHTML = htmlResult;
         document.getElementById("short-notify").innerHTML = '';
     }
+
     function editHtmlFailure(data) {
-        var  htmlResult = `<p style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;` + data + `</p>`;
+        var htmlResult = `<p style="color:red"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;` + data + `</p>`;
         document.getElementById("short-notify").innerHTML = htmlResult;
         document.getElementById("result-short").innerHTML = '';
-    }   
+    }
 })(jQuery);
+
 function fallbackCopyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
     textArea.value = text;
@@ -91,9 +93,9 @@ function copyTextToClipboard(text) {
         fallbackCopyTextToClipboard(text);
         return;
     }
-    navigator.clipboard.writeText(text).then(function() {
+    navigator.clipboard.writeText(text).then(function () {
         console.log('Async: Copying to clipboard was successful!');
-    }, function(err) {
+    }, function (err) {
         console.error('Async: Could not copy text: ', err);
     });
 }

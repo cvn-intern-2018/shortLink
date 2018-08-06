@@ -8,7 +8,8 @@
             <nav role="navigation" class="navbar navbar-default">
                 <div class="container">
                     <div class="navbar-header">
-                        <a href="/" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40" width="50"><span>Cybozu</span><span>Company</span></a>
+                        <a href="/" class="navbar-brand brand"><img src="assets/images/ogp.png" alt="" height="40"
+                                                                    width="50"><span>Cybozu</span><span>Company</span></a>
                     </div>
                 </div>
             </nav>
@@ -25,12 +26,18 @@
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <h5>Original Link: </h5>
-                                                    <a target="_blank" class="original-url" href=" {{$obj_info_url_shortener->url_original}}" data-toggle="tooltip" data-placement="top" title="{{$obj_info_url_shortener->url_original}}" id="original_link_chart">
+                                                    <a target="_blank" class="original-url"
+                                                       href=" {{$obj_info_url_shortener->url_original}}"
+                                                       data-toggle="tooltip" data-placement="top"
+                                                       title="{{$obj_info_url_shortener->url_original}}"
+                                                       id="original_link_chart">
                                                         {{$obj_info_url_shortener->url_original}}
                                                     </a>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button href="#" class=" fas fa-copy edit-btn btn btn-info btn-lg" id="btn_copy_original_link" onclick="copyToClipboard('#original_link_chart')">
+                                                    <button href="#" class=" fas fa-copy edit-btn btn btn-info btn-lg"
+                                                            id="btn_copy_original_link"
+                                                            onclick="copyToClipboard('#original_link_chart')">
                                                         copy
                                                     </button>
 
@@ -41,12 +48,16 @@
                                             <div class="row">
                                                 <div class="col-md-10">
                                                     <h5>URL Shortener: </h5>
-                                                    <a target="_blank" class="original-url" id="shorten_link_chart" href="{{$obj_info_url_shortener->url_short}}">
-                                                        {{config('constants.domain')}}/{{$obj_info_url_shortener->url_short}}
+                                                    <a target="_blank" class="original-url" id="shorten_link_chart"
+                                                       href="{{$obj_info_url_shortener->url_short}}">
+                                                        {{config('constants.domain')}}
+                                                        /{{$obj_info_url_shortener->url_short}}
                                                     </a>
                                                 </div>
                                                 <div class="col-md-2">
-                                                    <button href="#" class="fas fa-copy  edit-btn btn btn-info btn-lg" id="btn_copy_shorten_link" onclick="copyToClipboard('#shorten_link_chart')">
+                                                    <button href="#" class="fas fa-copy  edit-btn btn btn-info btn-lg"
+                                                            id="btn_copy_shorten_link"
+                                                            onclick="copyToClipboard('#shorten_link_chart')">
                                                         copy
 
                                                     </button>
@@ -56,7 +67,7 @@
                                         <div class="info-url form-group">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <h5>Time Created <p>(dd-mm-yyyy)</p>: </h5>
+                                                    <h5>Time Created <p>(dd-mm-yyyy)</p>:</h5>
                                                     <p>{{$obj_info_url_shortener->created_at}}</p>
                                                 </div>
                                             </div>
@@ -80,16 +91,24 @@
                                     <div class="col-md-10 col-md-offset-1">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                    <h3 style="display: inline">Chart</h3>
+                                                <h3 style="display: inline">Chart</h3>
                                                 <div style="display: inline" class="pull-right">
                                                     {{$obj_info_url_shortener->count_clicked_time}} clicks
                                                     <i class="fa fa-bar-chart" aria-hidden="true"> </i>
                                                     <select id="time-frame">
-                                                        <option value= {{config('constants.timeframe.2hours')}}>2 hours</option>
-                                                        <option value= {{config('constants.timeframe.day')}}>Day</option>
-                                                        <option value= {{config('constants.timeframe.week')}}>Week</option>
-                                                        <option value= {{config('constants.timeframe.month')}}>Month</option>
-                                                        <option selected value= {{config('constants.timeframe.alltime')}}>All time</option>
+                                                        <option value= {{config('constants.timeframe.2hours')}}>2
+                                                            hours
+                                                        </option>
+                                                        <option value= {{config('constants.timeframe.day')}}>Day
+                                                        </option>
+                                                        <option value= {{config('constants.timeframe.week')}}>Week
+                                                        </option>
+                                                        <option value= {{config('constants.timeframe.month')}}>Month
+                                                        </option>
+                                                        <option selected
+                                                                value= {{config('constants.timeframe.alltime')}}>All
+                                                            time
+                                                        </option>
                                                     </select>
                                                 </div>
 
@@ -120,8 +139,8 @@
         </footer>
     </div><!-- /#page -->
 @endsection
-@section('script')    
-    <script>     
+@section('script')
+    <script>
         var arr_data_browser = <?php echo json_encode($arr_data_browser); ?>;
         var conts_hours_to_milliseconds = {{config('constants.hours_to_milliseconds')}};
     </script>

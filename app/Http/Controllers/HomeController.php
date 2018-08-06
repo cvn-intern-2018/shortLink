@@ -13,14 +13,14 @@ use Illuminate\Support\Str;
 use Webpatser\Uuid\Uuid;
 
 
-define('BROWSER','browser');
-define('CREATED_AT','created_at');
+define('BROWSER', 'browser');
+define('CREATED_AT', 'created_at');
 
 define('GENERATE', 0);
 define('CUSTOMIZE', 1);
 
-define('ERROR_EXIST',"This link already existed. Please choose another short link");
-define('INVALID_URL',"Invalid URL");
+define('ERROR_EXIST', "This link already existed. Please choose another short link");
+define('INVALID_URL', "Invalid URL");
 define('MIN_LENGTH_CUSTOM', 7);
 define('ERROR_LENGTH_CUSTOM', "Custom URL at least 7 letters");
 
@@ -31,16 +31,17 @@ class HomeController extends Controller
     /**
      * @return string domain
      */
-    public function getDomain() {
-        if(strlen($_SERVER['SERVER_PORT']) > 0)
-            return config('constants.domain') ;
+    public function getDomain()
+    {
+        if (strlen($_SERVER['SERVER_PORT']) > 0)
+            return config('constants.domain');
         return $_SERVER['SERVER_NAME'];
     }
 
 
     public function index()
     {
-        return view('home' ,['domain'=> $this->getDomain()]);
+        return view('home', ['domain' => $this->getDomain()]);
     }
 
 
@@ -53,7 +54,7 @@ class HomeController extends Controller
     {
         $right_url = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
 
-        return (strlen($url) < 2048 && preg_match($right_url, $url)) ;
+        return (strlen($url) < 2048 && preg_match($right_url, $url));
     }
 
 
@@ -90,39 +91,35 @@ class HomeController extends Controller
     {
         $isError = true;
         $url = new Url();
-        $old_id = $url->getMaxId();  
-        
-        if (!$this->validateLink($req->org_url)) 
-            return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
+
+        if (!$this->validateLink($req->org_url))
+            return response()->json(['data' => INVALID_URL, 'isError' => $isError]);
 
         if (strlen($req->custom_url) == 0) {
-            if($url->isExistInDatabase('url_original', $req->org_url, 'short_type', GENERATE))
-            {
+            if ($url->isExistInDatabase('url_original', $req->org_url, 'short_type', GENERATE)) {
                 $row_data = $url->getDataRows('url_original', $req->org_url);
                 $isError = false;
-                return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
-            } 
-            else {
+                return response()->json(['data' => $row_data, 'isError' => $isError, 'domain' => $this->getDomain()]);
+            } else {
                 $url->saveData($req->org_url, Uuid::generate()->string, GENERATE);//save temporary
                 // update short url
                 $short_url = $this->encode($url->id);
-                $url->url_shorten =  $short_url ;
+                $url->url_shorten = $short_url;
                 $url->save();
             }
-        } 
-        else {
-            if(strlen($req->custom_url) < MIN_LENGTH_CUSTOM) {
-                return response()->json(['data' => ERROR_LENGTH_CUSTOM ,'isError' =>  $isError]);
+        } else {
+            if (strlen($req->custom_url) < MIN_LENGTH_CUSTOM) {
+                return response()->json(['data' => ERROR_LENGTH_CUSTOM, 'isError' => $isError]);
             }
-            if($url->isExistInDatabase('url_shorten', $req->custom_url))
-                return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
+            if ($url->isExistInDatabase('url_shorten', $req->custom_url))
+                return response()->json(['data' => ERROR_EXIST, 'isError' => $isError]);
             else
                 $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
         }
-        $current_id =  $url->getMaxId();
-        $data = $url->getDataRows('id', $current_id);
+
+        $data = $url->getDataRows('id', $url->id);
         $isError = false;
-        return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
+        return response()->json(['data' => $data, 'isError' => $isError, 'domain' => $this->getDomain()]);
     }
 
 
@@ -156,16 +153,16 @@ class HomeController extends Controller
      * Update Url_info when click shorten link
      * * @param Request $request
      */
-    public function updateUrlInfo($id){
+    public function updateUrlInfo($id)
+    {
         $browser = $this->getBrowser();
         $access = Access::where('id', $id)->where('browser', $browser)->first();
         $time = round(microtime(true) * 1000);
         if (is_null($access)) {
             $access = new Access();
             $access->saveData($id, $browser, $time);
-        } 
-        else {
-            $access->clicked_time =  $access->clicked_time.' '.$time;
+        } else {
+            $access->clicked_time = $access->clicked_time . ' ' . $time;
             $access->save();
         };
     }
@@ -174,7 +171,8 @@ class HomeController extends Controller
     /**
      * @return View
      */
-    public function pageNotFound(){
+    public function pageNotFound()
+    {
         return view('error.404');
     }
 
@@ -187,20 +185,19 @@ class HomeController extends Controller
     {
         var_dump($url_shorten);
         $url = new Url();
-         //Redirect Statistics
-        if (substr($url_shorten, -1) === '+')
-        {
+        //Redirect Statistics
+        if (substr($url_shorten, -1) === '+') {
             $url_shorten = rtrim($url_shorten, "+");
             return $url_shorten ?
-                redirect()->action('ChartController@index', ['url_shorten' => $url_shorten]):redirect('/pagenotfound');
+                redirect()->action('ChartController@index', ['url_shorten' => $url_shorten]) : redirect('/pagenotfound');
 
         }
         $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
 
-        if(!is_null($url_original)) {
+        if (!is_null($url_original)) {
             $id = $url->getAttributeRowData('url_shorten', $url_shorten, 'id');
             $this->updateUrlInfo($id);
-            return  redirect($url_original);
+            return redirect($url_original);
         }
 
         return redirect('/pagenotfound');

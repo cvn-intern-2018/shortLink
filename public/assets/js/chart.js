@@ -1,17 +1,16 @@
-
-
-(function($){    
+(function ($) {
     drawChart(arr_data_browser);
     jQuery('#time-frame').change(function () {
-        var time_select =  $( this ).val();
+        var time_select = $(this).val();
         var time_now = Date.now();
-        var time_line = time_now - time_select*conts_hours_to_milliseconds;
-        if (time_select == 0){
+        var time_line = time_now - time_select * conts_hours_to_milliseconds;
+        if (time_select == 0) {
             time_line = 0;
         }
-        drawChart(filterDataByTime(arr_data_browser,time_line));
+        drawChart(filterDataByTime(arr_data_browser, time_line));
     })
 })(jQuery);
+
 function copyToClipboard(element) {
     var $temp = $("<input>");
     $("body").append($temp);
@@ -19,23 +18,24 @@ function copyToClipboard(element) {
     document.execCommand("copy");
     $temp.remove();
 }
-function drawChart(arr_data_browser){
+
+function drawChart(arr_data_browser) {
 
     $('#myChart').remove();
     $('#canvas-wrapper').append('<canvas id="myChart" width="400" height="400"></canvas>');
 
     var ctx = document.getElementById("myChart").getContext('2d');
     var labelsChart = [];
-    var dataChart = [];     
-    arr_data_browser.forEach(function(element){
+    var dataChart = [];
+    arr_data_browser.forEach(function (element) {
         labelsChart.push(element.browser_name);
         dataChart.push(element.total_click);
-    });       
+    });
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labelsChart,
-            datasets: [{                
+            datasets: [{
                 data: dataChart,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -62,7 +62,7 @@ function drawChart(arr_data_browser){
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero:true
+                        beginAtZero: true
                     }
                 }]
             }
@@ -70,9 +70,9 @@ function drawChart(arr_data_browser){
     });
 }
 
-function filterDataByTime(arr_data_browser,time_line){
+function filterDataByTime(arr_data_browser, time_line) {
     arr_data_browser.forEach(function (element) {
-        if (element.total_click > 0){
+        if (element.total_click > 0) {
             element.arr_click_time = element.arr_click_time.filter(item => (item >= time_line));
             element.total_click = element.arr_click_time.length;
         }
