@@ -21,21 +21,19 @@ class ChartController extends Controller
         if (is_null($record_url))
             return view('error.404');        
 
-        $count_clicked_time = 0;
-        $record_access = Access::GetById($record_url->id)->get();  
-        if (!is_null($record_access)) {            
-            foreach ($record_access as $item) { 
-                $arr_clicked_time = explode(' ',$item->clicked_time);                
-                $count_clicked_time += count($arr_clicked_time);
-                $arr_data_browser[$item->browser]->total_click = count($arr_clicked_time);
-                $arr_data_browser[$item->browser]->arr_click_time = $arr_clicked_time;
-            }
-        }    
+        $clicked_time_total = 0;
+        $record_access = Access::GetById($record_url->id)->get();
+        foreach ($record_access as $item) {
+            $arr_clicked_time = explode(' ',$item->clicked_time);
+            $clicked_time_total += count($arr_clicked_time);
+            $arr_data_browser[$item->browser]->total_click = count($arr_clicked_time);
+            $arr_data_browser[$item->browser]->arr_click_time = $arr_clicked_time;
+        }
         $obj_info_url_shortener = (object)[
             'url_original'  => $record_url->url_original,
             'url_short'     =>  $record_url->url_shorten,
             'created_at'    => date_format(date_create($record_url->created_at), 'd-m-Y'),
-            'count_clicked_time' => $count_clicked_time,
+            'count_clicked_time' => $clicked_time_total,
         ];        
         return view('chart')->with(compact('obj_info_url_shortener','arr_data_browser'));
     }

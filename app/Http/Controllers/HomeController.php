@@ -158,6 +158,7 @@ class HomeController extends Controller
      */
     public function updateUrlInfo($id){
         $browser = $this->getBrowser();
+        dd($browser);
         $access = Access::where('id', $id)->where('browser', $browser)->first();
         $time = round(microtime(true) * 1000);
         if (is_null($access)) {
@@ -185,7 +186,6 @@ class HomeController extends Controller
      */
     public function redirectUrl($url_shorten)
     {
-        var_dump($url_shorten);
         $url = new Url();
          //Redirect Statistics
         if (substr($url_shorten, -1) === '+')
