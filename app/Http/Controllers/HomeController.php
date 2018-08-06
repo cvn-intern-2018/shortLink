@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Url;
 use Illuminate\Support\Facades\View;
 use function MongoDB\BSON\toJSON;
+use Illuminate\Support\Str;
+use Webpatser\Uuid\Uuid;
 
 
 define('BROWSER','browser');
@@ -19,6 +21,8 @@ define('CUSTOMIZE', 1);
 
 define('ERROR_EXIST',"This link already existed. Please choose another short link");
 define('INVALID_URL',"Invalid URL");
+define('MIN_LENGTH_CUSTOM', 7);
+define('ERROR_LENGTH_CUSTOM', "Custom URL at least 7 letters");
 
 
 class HomeController extends Controller
@@ -47,9 +51,9 @@ class HomeController extends Controller
      */
     public function validateLink($url)
     {
-        $regular = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
+        $right_url = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
 
-        return (strlen($url) < 2048 && $check = preg_match($regular, $url)) ;
+        return (strlen($url) < 2048 && preg_match($right_url, $url)) ;
     }
 
 
@@ -92,20 +96,24 @@ class HomeController extends Controller
             return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
 
         if (strlen($req->custom_url) == 0) {
-            if($url->isExistInDatabaseWith2Argument('url_original', $req->org_url, 'short_type', GENERATE))
+            if($url->isExistInDatabase('url_original', $req->org_url, 'short_type', GENERATE))
             {
                 $row_data = $url->getDataRows('url_original', $req->org_url);
                 $isError = false;
                 return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
             } 
             else {
-                $short_url = $this->encode($old_id + 1);
-                while($url->isExistInDatabase('url_shorten', $short_url))
-                    $short_url = $this->encode($old_id + 1);
-                $url->saveData($req->org_url, $short_url, GENERATE);
+                $url->saveData($req->org_url, Uuid::generate()->string, GENERATE);//save temporary
+                // update short url
+                $short_url = $this->encode($url->id);
+                $url->url_shorten =  $short_url ;
+                $url->save();
             }
         } 
-        else { 
+        else {
+            if(strlen($req->custom_url) < MIN_LENGTH_CUSTOM) {
+                return response()->json(['data' => ERROR_LENGTH_CUSTOM ,'isError' =>  $isError]);
+            }
             if($url->isExistInDatabase('url_shorten', $req->custom_url))
                 return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
             else
