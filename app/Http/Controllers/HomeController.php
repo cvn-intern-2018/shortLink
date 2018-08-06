@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Url;
 use Illuminate\Support\Facades\View;
 use function MongoDB\BSON\toJSON;
+use Illuminate\Support\Str;
 
 
 define('BROWSER','browser');
@@ -47,11 +48,15 @@ class HomeController extends Controller
      */
     public function validateLink($url)
     {
-        $regular = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
+        $right_url = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
 
-        return (strlen($url) < 2048 && $check = preg_match($regular, $url)) ;
+        return (strlen($url) < 2048 && preg_match($right_url, $url)) ;
     }
 
+    public function  validateCustomizeInput($string){
+        $right_input = '[a-zA-Z0-9\-\_]{7,20}';
+        return (preg_match($right_input, $string)) ;
+    }
 
     /**
      * encode
