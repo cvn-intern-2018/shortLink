@@ -22,7 +22,8 @@ define('CUSTOMIZE', 1);
 define('ERROR_EXIST',"This link already existed. Please choose another short link");
 define('INVALID_URL',"Invalid URL");
 define('MIN_LENGTH_CUSTOM', 7);
-define('ERROR_LENGTH_CUSTOM', "Custom URL at least 7 letters");
+define('MAX_LENGTH_CUSTOM', 20);
+define('ERROR_LENGTH_CUSTOM', "Custom URL at least 7 letters and at most 20 letters");
 
 
 class HomeController extends Controller
@@ -52,8 +53,7 @@ class HomeController extends Controller
     public function validateLink($url)
     {
         $right_url = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
-
-        return (strlen($url) < 2048 && preg_match($right_url, $url)) ;
+        return (strlen($url) < 2048 && preg_match($right_url, $url));
     }
 
 
@@ -109,10 +109,10 @@ class HomeController extends Controller
                 $url->url_shorten =  $short_url ;
                 $url->save();
             }
-        }
-        else {
-            if(strlen($req->custom_url) < MIN_LENGTH_CUSTOM) {
-                return response()->json(['data' => ERROR_LENGTH_CUSTOM ,'isError' =>  $isError]);
+
+        } else {
+            if (strlen($req->custom_url) < MIN_LENGTH_CUSTOM || strlen($req->custom_url) > MAX_LENGTH_CUSTOM) {
+                return response()->json(['data' => ERROR_LENGTH_CUSTOM, 'isError' => $isError]);
             }
             if($url->isExistInDatabase('url_shorten', $req->custom_url))
                 return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);

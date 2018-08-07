@@ -32,7 +32,7 @@
                                             <h4>Customize short URL (Optional)</h4>
                                             <p>{{ $domain }}/</p><input maxlength="20" type="text" id="custom_url"
                                                                         name="custom_url"
-                                                                        placeholder="7-20 characters( alphabet ,numeric, hyphen ,underscore)">
+                                                                        placeholder="7-20 characters (alphabet, numeric, hyphen, underscore)">
                                         </div>
                                         <div class="form-group row" id="short-notify">
 
