@@ -56,6 +56,9 @@ class Url extends Model
     {
         return $query->where('url_shorten', $url_shorten);
     }
-
+    function scopeGetIDByUrlShorten($query, $url_shorten)
+    {
+        return $query->where('url_shorten', $url_shorten)->pluck('id');
+    }
 
 }

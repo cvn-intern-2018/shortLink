@@ -77,7 +77,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5>Total Clicks: </h5>
-                                                    <p>{{$obj_info_url_shortener->count_clicked_time}}</p>
+                                                    <p>{{$obj_info_url_shortener->clicked_time_total}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -92,7 +92,7 @@
                                             <div class="panel-heading">
                                                 <h3 style="display: inline">Chart</h3>
                                                 <div style="display: inline" class="pull-right">
-                                                    {{$obj_info_url_shortener->count_clicked_time}} clicks
+                                                    {{$obj_info_url_shortener->clicked_time_total}} clicks
                                                     <i class="fa fa-bar-chart" aria-hidden="true"> </i>
                                                     <select id="time-frame">
                                                         <option value= {{config('constants.timeframe.2hours')}}>2
@@ -140,8 +140,9 @@
 @endsection
 @section('script')
     <script>
-        var arr_data_browser = <?php echo json_encode($arr_data_browser); ?>;
-        var conts_hours_to_milliseconds = {{config('constants.hours_to_milliseconds')}};
+        var url_shortener = '<?php echo $obj_info_url_shortener->url_short; ?>';
+        var arr_data_browser = '<?php echo json_encode($arr_data_browser); ?>';
+        arr_data_browser = JSON.parse(arr_data_browser);
     </script>
     <script src="{{asset('assets/js/chart.js')}}"></script>
 @endsection

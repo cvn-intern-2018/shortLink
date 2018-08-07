@@ -190,14 +190,13 @@ class HomeController extends Controller
          //Redirect Statistics
         if (substr($url_shorten, -1) === '+')
         {
-            $url_shorten = rtrim($url_shorten, "+");
+            $url_shorten = substr($url_shorten, 0, -1);rtrim($url_shorten, "+");
             return $url_shorten ?
                 redirect()->action('ChartController@index', ['url_shorten' => $url_shorten]):redirect('/pagenotfound');
 
         }
         $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
-
-        if(!is_null($url_original)) {
+        if($url_original != null) {
             $url_id = $url->getAttributeRowData('url_shorten', $url_shorten, 'id');
             $this->updateUrlInfo($url_id);
             return  redirect($url_original);
