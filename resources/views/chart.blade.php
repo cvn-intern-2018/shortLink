@@ -77,7 +77,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <h5>Total Clicks: </h5>
-                                                    <p>{{$obj_info_url_shortener->clicked_time_total}}</p>
+                                                    <p>{{ $obj_info_url_shortener->clicked_time_total }} </p>
                                                 </div>
                                             </div>
                                         </div>

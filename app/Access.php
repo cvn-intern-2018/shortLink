@@ -42,20 +42,6 @@ class Access extends Model
         return $query->where('browser', $browser);
     }
 
-    /**
-     * @param $query
-     * @param $url_id
-     * @return int
-     */
-    function scopeGetTotalClickUrlShort($query, $url_id){
-        $clicked_time_total = 0;
-        $records = $query->where('url_id', $url_id )->get();
-        foreach ($records as $item) {
-            $arr_clicked_time = explode(' ',$item->clicked_time);
-            $clicked_time_total += count($arr_clicked_time);
-        }
-        return $clicked_time_total;
-    }
 
     /**
      * @param $query

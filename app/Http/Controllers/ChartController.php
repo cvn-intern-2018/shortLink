@@ -21,13 +21,22 @@ class ChartController extends Controller
         $record_url = Url::GetByUrlShorten($url_shorter)->first();
         if (is_null($record_url))
             return view('error.404');
+
+        $clicked_time_total = 0;
+        $records = Access::where('url_id', $record_url->id )->get();
+        foreach ($records as $item) {
+            $arr_clicked_time = explode(' ',$item->clicked_time);
+            $clicked_time_total += count($arr_clicked_time);
+        }
+        
         $obj_info_url_shortener = (object)[
             'url_original'  => $record_url->url_original,
             'url_short'     =>  $record_url->url_shorten,
             'created_at'    => date_format(date_create(), 'd-m-Y'),
-            'clicked_time_total' => Access::GetTotalClickUrlShort($record_url->id) ? Access::GetTotalClickUrlShort($record_url->id) : 0,
+            'clicked_time_total' => $clicked_time_total,
         ];
         $arr_data_browser = $this->convertArrToStatistics(Access::GetArrTimerUrlShort($record_url->id));
+
         return view('chart')->with(compact('obj_info_url_shortener','arr_data_browser', 'domain'));
     }
 
