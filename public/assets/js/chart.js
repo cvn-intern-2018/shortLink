@@ -1,27 +1,35 @@
 (function ($) {
-    drawChart(arr_data_browser);
-    jQuery('#time-frame').change(function (e) {
-        e.preventDefault();
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        jQuery.ajax({
-            url: 'chart/sort',
-            type: 'POST',
-            data: {
-                time_select: $(this).val(),
-                url_shortener: url_shortener,
-            },
-            success: function (result) {
-                drawChart(result.data);
-            },
-            error: function (result) {
-                alert('false');
-            }
-        });
-    })
+    if (Number(clicked_time_total) === 0){
+        $('#panel-chart').remove();
+    }
+    else {
+        drawChart(arr_data_browser);
+        jQuery('#time-frame').change(function (e) {
+            e.preventDefault();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            jQuery.ajax({
+                url: 'chart/sort',
+                type: 'POST',
+                data: {
+                    time_select: $(this).val(),
+                    url_shortener: url_shortener,
+                },
+                success: function (result) {
+                    console.log('12321');
+                    console.log(result);
+                    drawChart(result.data);
+                },
+                error: function (result) {
+                    alert('false');
+                }
+            });
+        })
+    }
+
 })(jQuery);
 
 function copyToClipboard(element) {
@@ -49,6 +57,7 @@ function drawChart(arr_data) {
         data: {
             labels: labelsChart,
             datasets: [{
+                label: '# of Votes',
                 data: dataChart,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -78,6 +87,16 @@ function drawChart(arr_data) {
                         beginAtZero: true
                     }
                 }]
+            },
+            legend: {
+                display: false
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return tooltipItem.yLabel;
+                    }
+                }
             }
         }
     });

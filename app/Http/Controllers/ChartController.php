@@ -24,10 +24,9 @@ class ChartController extends Controller
             'url_original'  => $record_url->url_original,
             'url_short'     =>  $record_url->url_shorten,
             'created_at'    => date_format(date_create(), 'd-m-Y'),
-            'clicked_time_total' => Access::GetTotalClickUrlShort($record_url->id),
+            'clicked_time_total' => Access::GetTotalClickUrlShort($record_url->id) ? 0 : Access::GetTotalClickUrlShort($record_url->id),
         ];
         $arr_data_browser = $this->convertArrToStatistics(Access::GetArrTimerUrlShort($record_url->id));
-
         return view('chart')->with(compact('obj_info_url_shortener','arr_data_browser'));
     }
 

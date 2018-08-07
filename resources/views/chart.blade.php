@@ -85,15 +85,15 @@
 
                                 </div>
                             </div>
-                            <div class="row graph-chart">
+                            <div class="row graph-chart" id="panel-chart">
                                 <div class="row">
                                     <div class="col-md-10 col-md-offset-1">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 style="display: inline">Chart</h3>
-                                                <div style="display: inline" class="pull-right">
+                                                <div style="display: inline" class="pull-right"><i class="far fa-chart-bar" style="font-size: 20px; vertical-align: middle"></i>
                                                     {{$obj_info_url_shortener->clicked_time_total}} clicks
-                                                    <i class="fa fa-bar-chart" aria-hidden="true"> </i>
+                                                     </i>
                                                     <select id="time-frame">
                                                         <option value= {{config('constants.timeframe.2hours')}}>2
                                                             hours
@@ -142,7 +142,9 @@
     <script>
         var url_shortener = '<?php echo $obj_info_url_shortener->url_short; ?>';
         var arr_data_browser = '<?php echo json_encode($arr_data_browser); ?>';
+        var clicked_time_total = '<?php echo $obj_info_url_shortener->clicked_time_total; ?>';
         arr_data_browser = JSON.parse(arr_data_browser);
+
     </script>
     <script src="{{asset('assets/js/chart.js')}}"></script>
 @endsection

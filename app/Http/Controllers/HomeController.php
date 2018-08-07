@@ -104,7 +104,6 @@ class HomeController extends Controller
             }
             else {
                 $url->saveData($req->org_url, Uuid::generate()->string, GENERATE);//save temporary
-                // update short url
                 $short_url = $this->encode($url->id);
                 $url->url_shorten =  $short_url ;
                 $url->save();
@@ -188,12 +187,11 @@ class HomeController extends Controller
     {
         $url = new Url();
          //Redirect Statistics
-        if (substr($url_shorten, -1) === '+')
+        if ($url_shorten[count($url_shorten)] === '+'&& substr_count($url_shorten,'+') == 1)
         {
-            $url_shorten = substr($url_shorten, 0, -1);rtrim($url_shorten, "+");
+            $url_shorten = substr($url_shorten, 0, -1);
             return $url_shorten ?
                 redirect()->action('ChartController@index', ['url_shorten' => $url_shorten]):redirect('/pagenotfound');
-
         }
         $url_original = $url->getAttributeRowData('url_shorten', $url_shorten, 'url_original');
         if($url_original != null) {
