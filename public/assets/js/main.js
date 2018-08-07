@@ -39,11 +39,12 @@
                                 <div class="col-md-2">
                                      <a id="btnCopy" onclick="return copyTextToClipboard('` + domain + `/` + data[i].url_shorten + `')">
                                      <i class="fas fa-copy" style="background-color: #688490"></i>
+                                     <div id="snackbar">Copy success</div>
                                     </a>
 
                                 </div>
                                 <div class="col-md-2">
-                                     <a  href="` + data[i].url_shorten + `+"><i class="fas fa-chart-bar"></i></i></a>
+                                     <a target="_blank" href="` + data[i].url_shorten + `+"><i class="fas fa-chart-bar"></i></i></a>
                                  </div>
                             </div>
                                `
@@ -98,4 +99,8 @@ function copyTextToClipboard(text) {
     }, function (err) {
         console.error('Async: Could not copy text: ', err);
     });
+
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
