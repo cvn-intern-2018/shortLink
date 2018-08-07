@@ -120,9 +120,6 @@ class HomeController extends Controller
             }
 
         } else {
-            // if (strlen($req->custom_url) < MIN_LENGTH_CUSTOM || strlen($req->custom_url) > MAX_LENGTH_CUSTOM) {
-            //     return response()->json(['data' => ERROR_LENGTH_CUSTOM, 'isError' => $isError]);
-            // }
             if (!$this->validateCustomizeInput($req->custom_url)) {
                 return response()->json(['data' => ERROR_CUSTOM, 'isError' => $isError]);
             }
