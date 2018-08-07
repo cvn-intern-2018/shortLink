@@ -157,7 +157,7 @@ class HomeController extends Controller
             if (strpos($user_agent, $user_agent_part)) return $browser;
         }
 
-        return OTHERS;
+        return config('constants.browser.OTHERS');
     }
 
 

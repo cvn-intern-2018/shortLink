@@ -11,7 +11,6 @@ return [
         'EDGE' => 5,
         'IE' => 6,
 
-
     ],
     'timeframe' => [
         'alltime' => 0,
