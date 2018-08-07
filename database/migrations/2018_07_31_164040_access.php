@@ -14,11 +14,11 @@ class Access extends Migration
     public function up()
     {
         Schema::create('access', function (Blueprint $table) {
-            $table->bigInteger('id')->unsigned();
+            $table->bigIncrements('id');
+            $table->bigInteger('url_id')->unsigned();
             $table->tinyInteger('browser');
             $table->text('clicked_time');
-            $table->primary(['id', 'browser']);
-            $table->foreign('id')->references('id')->on('url');
+            $table->foreign('url_id')->references('id')->on('url');
 
         });
     }

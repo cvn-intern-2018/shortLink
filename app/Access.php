@@ -9,17 +9,17 @@ class Access extends Model
     protected $table = 'access';
     public $timestamps = false;
 
-    function saveData($id, $browser, $click_time)
+    function saveData($url_id, $browser, $click_time)
     {
-        $this->id = $id;
+        $this->url_id = $url_id;
         $this->browser = $browser;
         $this->clicked_time = $click_time;
         $this->save();
     }
 
-    function scopeGetById($query, $id)
+    function scopeGetById($query, $url_id)
     {
-        return $query->where('id', $id);
+        return $query->where('url_id', $url_id );
     }
 
     function scopeGetByBrowser($query, $browser)

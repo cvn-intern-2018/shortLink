@@ -22,7 +22,7 @@ class ChartController extends Controller
             return view('error.404');
 
         $clicked_time_total = 0;
-        $record_access = Access::GetById($record_url->id)->get();
+        $record_access = Access::GetById($record_url->url_id)->get();
         foreach ($record_access as $item) {
             $arr_clicked_time = explode(' ',$item->clicked_time);
             $clicked_time_total += count($arr_clicked_time);
