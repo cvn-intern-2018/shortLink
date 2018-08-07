@@ -493,7 +493,6 @@
 /* header */
 .header3 {
     background: url('../images/header1.jpg') no-repeat scroll center -90px;
-/ cover;
     font-family: 'Titillium Web', sans-serif;
 }
 
@@ -665,7 +664,6 @@
 /* header */
 .header4 {
     background: url('../images/header1.jpg') no-repeat scroll center -90px;
-/ cover;
     font-family: 'Titillium Web', sans-serif;
 }
 
@@ -7854,7 +7852,7 @@ hr.shadowDown {
     font-size: 20px;
 }
 
-. footer7 .footer-logo {
+.footer7 .footer-logo {
     color: #fff;
     font-family: "Titillium Web", sans-serif;
     text-transform: uppercase;
@@ -8128,3 +8126,20 @@ hr.shadowDown {
     left: 50%;
     margin-left: -80px;
 }
+
+#snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+}
+

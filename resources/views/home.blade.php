@@ -46,6 +46,7 @@
                                     </div>
 
                                 </div>
+                               
 
                                 <div class="row result-short" id="result-short">
 
@@ -80,6 +81,8 @@
                 this.value = this.value.replace(/^-+/, "");
             }
         });
+
+        
     </script>
 @endsection
 

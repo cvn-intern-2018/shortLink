@@ -39,6 +39,7 @@
                                 <div class="col-md-2">
                                      <a id="btnCopy" onclick="return copyTextToClipboard('` + domain + `/` + data[i].url_shorten + `')">
                                      <i class="fas fa-copy" style="background-color: #688490"></i>
+                                   
                                     </a>
 
                                 </div>

@@ -20,10 +20,8 @@ define('GENERATE', 0);
 define('CUSTOMIZE', 1);
 
 define('ERROR_EXIST',"This link already existed. Please choose another short link");
-define('INVALID_URL',"Invalid URL");
-define('MIN_LENGTH_CUSTOM', 7);
-define('MAX_LENGTH_CUSTOM', 20);
-define('ERROR_LENGTH_CUSTOM', "Custom URL at least 7 letters and at most 20 letters");
+define('INVALID_URL',"Invalid original URL");
+define('ERROR_CUSTOM', "Invalid custom url");
 
 
 class HomeController extends Controller
@@ -54,6 +52,17 @@ class HomeController extends Controller
     {
         $right_url = '/^(https?:\/\/)?([\da-zA-Z\.-]+)\.([a-zA-Z\.]{2,6})(\S)*$/';
         return (strlen($url) < 2048 && preg_match($right_url, $url));
+    }
+
+
+    /**
+     * @param $string
+     * @return boolean
+     */
+    public function validateCustomizeInput($string)
+    {
+        $right_input = '/^[^\-][a-zA-Z0-9\-\_]{7,20}$/';
+        return (preg_match($right_input, $string));
     }
 
 
@@ -111,8 +120,11 @@ class HomeController extends Controller
             }
 
         } else {
-            if (strlen($req->custom_url) < MIN_LENGTH_CUSTOM || strlen($req->custom_url) > MAX_LENGTH_CUSTOM) {
-                return response()->json(['data' => ERROR_LENGTH_CUSTOM, 'isError' => $isError]);
+            // if (strlen($req->custom_url) < MIN_LENGTH_CUSTOM || strlen($req->custom_url) > MAX_LENGTH_CUSTOM) {
+            //     return response()->json(['data' => ERROR_LENGTH_CUSTOM, 'isError' => $isError]);
+            // }
+            if (!$this->validateCustomizeInput($req->custom_url)) {
+                return response()->json(['data' => ERROR_CUSTOM, 'isError' => $isError]);
             }
             if($url->isExistInDatabase('url_shorten', $req->custom_url))
                 return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
