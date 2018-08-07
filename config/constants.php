@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'domain' => $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'],
     'browser' => [
         'OTHERS' => 0,
         'CHROME' => 1,
@@ -20,5 +19,16 @@ return [
         'week' => 168,
         'month' => 720,
     ],
+    'typeShortUrl' => [
+        'GENERATE' => 0,
+        'CUSTOMIZE' => 1
+    ],
+
+    'error' =>[
+        'ERROR_EXIST' => 'This link already existed. Please choose another short link',
+        'INVALID_URL' => 'Invalid original URL',
+        'ERROR_CUSTOM' => 'Invalid custom url'
+    ],
+
     'hours_to_milliseconds' => 3600000,
 ];

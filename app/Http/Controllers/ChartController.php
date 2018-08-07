@@ -16,6 +16,7 @@ class ChartController extends Controller
      */
     public function index(Request $request)
     {
+        $domain = HomeController::getDomain();
         $url_shorter = $request->url_shorten;
         $record_url = Url::GetByUrlShorten($url_shorter)->first();
         if (is_null($record_url))
@@ -27,7 +28,7 @@ class ChartController extends Controller
             'clicked_time_total' => Access::GetTotalClickUrlShort($record_url->id) ? Access::GetTotalClickUrlShort($record_url->id) : 0,
         ];
         $arr_data_browser = $this->convertArrToStatistics(Access::GetArrTimerUrlShort($record_url->id));
-        return view('chart')->with(compact('obj_info_url_shortener','arr_data_browser'));
+        return view('chart')->with(compact('obj_info_url_shortener','arr_data_browser', 'domain'));
     }
 
     /**

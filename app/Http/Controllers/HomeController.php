@@ -12,16 +12,8 @@ use function MongoDB\BSON\toJSON;
 use Illuminate\Support\Str;
 use Webpatser\Uuid\Uuid;
 
-
-define('BROWSER','browser');
-define('CREATED_AT','created_at');
-
 define('GENERATE', 0);
 define('CUSTOMIZE', 1);
-
-define('ERROR_EXIST',"This link already existed. Please choose another short link");
-define('INVALID_URL',"Invalid original URL");
-define('ERROR_CUSTOM', "Invalid custom url");
 
 
 class HomeController extends Controller
@@ -30,9 +22,9 @@ class HomeController extends Controller
     /**
      * @return string domain
      */
-    public function getDomain() {
+    public static  function getDomain() {
         if(strlen($_SERVER['SERVER_PORT']) > 0)
-            return config('constants.domain') ;
+            return $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] ;
         return $_SERVER['SERVER_NAME'];
     }
 
@@ -102,17 +94,17 @@ class HomeController extends Controller
         $old_id = $url->getMaxId();
 
         if (!$this->validateLink($req->org_url))
-            return response()->json(['data' => INVALID_URL ,'isError' =>  $isError]);
+            return response()->json(['data' => config('constants.error.INVALID_URL') ,'isError' =>  $isError]);
 
         if (strlen($req->custom_url) == 0) {
-            if($url->isExistInDatabase('url_original', $req->org_url, 'short_type', GENERATE))
+            if($url->isExistInDatabase('url_original', $req->org_url, 'short_type', config('constants.typeShortUrl.GENERATE')))
             {
                 $row_data = $url->getDataRows('url_original', $req->org_url);
                 $isError = false;
                 return response()->json(['data' =>  $row_data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
             }
             else {
-                $url->saveData($req->org_url, Uuid::generate()->string, GENERATE);//save temporary
+                $url->saveData($req->org_url, Uuid::generate()->string, config('constants.typeShortUrl.GENERATE'));//save temporary
                 $short_url = $this->encode($url->id);
                 $url->url_shorten =  $short_url ;
                 $url->save();
@@ -120,12 +112,12 @@ class HomeController extends Controller
 
         } else {
             if (!$this->validateCustomizeInput($req->custom_url)) {
-                return response()->json(['data' => ERROR_CUSTOM, 'isError' => $isError]);
+                return response()->json(['data' => config('constants.error.ERROR_CUSTOM'), 'isError' => $isError]);
             }
             if($url->isExistInDatabase('url_shorten', $req->custom_url))
-                return response()->json(['data' => ERROR_EXIST ,'isError' =>  $isError]);
+                return response()->json(['data' => config('constants.error.ERROR_EXIST') ,'isError' =>  $isError]);
             else
-                $url->saveData($req->org_url, $req->custom_url, CUSTOMIZE);
+                $url->saveData($req->org_url, $req->custom_url, config('constants.typeShortUrl.CUSTOMIZE'));
         }
         $current_id =  $url->getMaxId();
         $data = $url->getDataRows('id', $current_id);

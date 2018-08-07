@@ -50,7 +50,7 @@
                                                     <h5>URL Shortener: </h5>
                                                     <a target="_blank" class="original-url" id="shorten_link_chart"
                                                        href="{{$obj_info_url_shortener->url_short}}">
-                                                        {{config('constants.domain')}}/{{$obj_info_url_shortener->url_short}}
+                                                        {{$domain}}/{{$obj_info_url_shortener->url_short}}
                                                     </a>
                                                 </div>
                                                 <div class="col-md-2">
