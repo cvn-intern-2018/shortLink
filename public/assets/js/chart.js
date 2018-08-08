@@ -97,7 +97,9 @@ function drawChart(arr_data) {
                         return tooltipItem.yLabel;
                     }
                 }
-            }
+            },
+            responsive: true,
+            maintainAspectRatio: false
         }
     });
 }
