@@ -43,6 +43,7 @@ class Access extends Model
     }
 
 
+
     /**
      * @param $query
      * @param $url_id

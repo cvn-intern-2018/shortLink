@@ -119,8 +119,7 @@ class HomeController extends Controller
             else
                 $url->saveData($req->org_url, $req->custom_url, config('constants.typeShortUrl.CUSTOMIZE'));
         }
-        $current_id =  $url->getMaxId();
-        $data = $url->getDataRows('id', $current_id);
+        $data = $url->getDataRows('id', $url->id);
         $isError = false;
         return response()->json(['data' =>  $data ,'isError' =>  $isError, 'domain'=> $this->getDomain()]);
     }
